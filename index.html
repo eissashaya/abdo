@@ -1,0 +1,2936 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartExam - تطبيق الاختبارات الإلكترونية</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3a0ca3;
+            --success-color: #4cc9f0;
+            --warning-color: #f72585;
+            --danger-color: #7209b7;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --admin-color: #7209b7;
+            --teacher-color: #4361ee;
+            --student-color: #4cc9f0;
+            --sidebar-color: #3a0ca3;
+            --card-bg: #ffffff;
+            --hover-color: #f8f9fa;
+            --border-color: #e9ecef;
+            --text-primary: #212529;
+            --text-secondary: #6c757d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f8ff;
+            color: var(--text-primary);
+            line-height: 1.7;
+            background-image: linear-gradient(135deg, #f5f8ff 0%, #f0f4ff 100%);
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap');
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* تنسيقات عامة */
+        .card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(67, 97, 238, 0.08);
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(67, 97, 238, 0.1);
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 25px rgba(67, 97, 238, 0.15);
+        }
+
+        .card-title {
+            color: var(--secondary-color);
+            font-weight: 700;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(67, 97, 238, 0.2);
+            font-size: 1.4rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 15px;
+            gap: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), #3a56e4);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #3a56e4, var(--primary-color));
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success-color), #2fb5e0);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #2fb5e0, var(--success-color));
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, var(--warning-color), #e5176e);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: linear-gradient(135deg, #e5176e, var(--warning-color));
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger-color), #5d08a0);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #5d08a0, var(--danger-color));
+        }
+
+        .btn-admin {
+            background: linear-gradient(135deg, var(--admin-color), #5d08a0);
+            color: white;
+        }
+
+        .btn-teacher {
+            background: linear-gradient(135deg, var(--teacher-color), #3a56e4);
+            color: white;
+        }
+
+        .btn-student {
+            background: linear-gradient(135deg, var(--student-color), #2fb5e0);
+            color: white;
+        }
+
+        /* صفحة تسجيل الدخول */
+        .login-page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #3a0ca3 0%, #4361ee 50%, #4cc9f0 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-page::before {
+            content: '';
+            position: absolute;
+            width: 300%;
+            height: 300%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 15s infinite linear;
+        }
+
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 450px;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-card {
+            text-align: center;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .login-header {
+            padding: 30px 20px;
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .login-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        .login-header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .login-content {
+            padding: 0 30px 30px;
+        }
+
+        .user-type-selector {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            gap: 10px;
+        }
+
+        .user-type-btn {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid var(--border-color);
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .user-type-btn:not(:last-child) {
+            margin-left: 10px;
+        }
+
+        .user-type-btn.active {
+            border-color: var(--primary-color);
+            background-color: rgba(67, 97, 238, 0.1);
+            font-weight: bold;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.2);
+        }
+
+        .user-type-btn i {
+            display: block;
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .user-type-btn.active i {
+            color: var(--secondary-color);
+        }
+
+        .login-form .form-group {
+            margin-bottom: 25px;
+            text-align: right;
+        }
+
+        .login-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 15px;
+        }
+
+        .login-form input, .login-form select {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .login-form input:focus, .login-form select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        /* رأس الصفحة */
+        .header {
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            color: white;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            background: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-size: 24px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-text h2 {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .logo-text p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            margin-top: 2px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4cc9f0, #4361ee);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-details span:first-child {
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .user-type-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            text-align: center;
+            display: inline-block;
+            margin-top: 3px;
+            width: fit-content;
+        }
+
+        .badge-admin {
+            background: linear-gradient(135deg, var(--admin-color), #5d08a0);
+        }
+
+        .badge-teacher {
+            background: linear-gradient(135deg, var(--teacher-color), #3a56e4);
+        }
+
+        .badge-student {
+            background: linear-gradient(135deg, var(--student-color), #2fb5e0);
+        }
+
+        /* لوحة التحكم */
+        .dashboard {
+            display: flex;
+            min-height: calc(100vh - 80px);
+        }
+
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, var(--sidebar-color), #2d0a8a);
+            color: white;
+            padding: 25px 0;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 80px;
+            height: calc(100vh - 80px);
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 0 25px 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-header h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-right: 4px solid transparent;
+            font-weight: 500;
+        }
+
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-right-color: var(--student-color);
+            padding-right: 30px;
+        }
+
+        .sidebar-menu i {
+            margin-left: 15px;
+            width: 20px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            background-color: #f5f8ff;
+        }
+
+        .page-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(67, 97, 238, 0.1);
+        }
+
+        .page-title h2 {
+            color: var(--secondary-color);
+            font-weight: 800;
+            font-size: 1.8rem;
+        }
+
+        .page-title p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 30px 20px;
+            border-radius: 15px;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(67, 97, 238, 0.1);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(67, 97, 238, 0.15);
+        }
+
+        .stat-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 30px;
+            color: white;
+        }
+
+        .stat-icon.admin {
+            background: linear-gradient(135deg, var(--admin-color), #5d08a0);
+        }
+
+        .stat-icon.teacher {
+            background: linear-gradient(135deg, var(--teacher-color), #3a56e4);
+        }
+
+        .stat-icon.student {
+            background: linear-gradient(135deg, var(--student-color), #2fb5e0);
+        }
+
+        .stat-icon.primary {
+            background: linear-gradient(135deg, var(--primary-color), #3a56e4);
+        }
+
+        .stat-card h3 {
+            font-size: 36px;
+            margin-bottom: 5px;
+            color: var(--secondary-color);
+            font-weight: 800;
+        }
+
+        .stat-card p {
+            color: var(--text-secondary);
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        /* الجداول */
+        .table-container {
+            overflow-x: auto;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+            background: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background-color: white;
+        }
+
+        table th, table td {
+            padding: 16px 20px;
+            text-align: right;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        table th {
+            background: linear-gradient(135deg, var(--primary-color), #3a56e4);
+            color: white;
+            font-weight: 600;
+            font-size: 15px;
+            border: none;
+        }
+
+        table th:first-child {
+            border-top-right-radius: 12px;
+        }
+
+        table th:last-child {
+            border-top-left-radius: 12px;
+        }
+
+        table tr:hover {
+            background-color: rgba(67, 97, 238, 0.03);
+        }
+
+        table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            border: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* شاشة الاختبار */
+        .exam-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .exam-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(67, 97, 238, 0.1);
+        }
+
+        .timer {
+            background: linear-gradient(135deg, var(--warning-color), #e5176e);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 20px;
+            box-shadow: 0 4px 10px rgba(247, 37, 133, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .timer.warning {
+            background: linear-gradient(135deg, var(--danger-color), #5d08a0);
+            animation: pulse 1s infinite;
+            box-shadow: 0 4px 10px rgba(114, 9, 183, 0.3);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .question-navigation {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .question-nav-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+
+        .question-nav-btn.active {
+            border-color: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary-color), #3a56e4);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .question-nav-btn.answered {
+            background: linear-gradient(135deg, var(--success-color), #2fb5e0);
+            color: white;
+            border-color: var(--success-color);
+        }
+
+        .question-card {
+            margin-bottom: 30px;
+            padding: 30px;
+        }
+
+        .question-text {
+            font-size: 20px;
+            margin-bottom: 25px;
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-weight: 600;
+            padding-right: 10px;
+        }
+
+        .options-container {
+            margin-right: 20px;
+        }
+
+        .option {
+            margin-bottom: 15px;
+            padding: 18px 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+        }
+
+        .option:hover {
+            background-color: rgba(67, 97, 238, 0.05);
+            border-color: rgba(67, 97, 238, 0.3);
+        }
+
+        .option.selected {
+            border-color: var(--primary-color);
+            background-color: rgba(67, 97, 238, 0.1);
+            transform: translateX(-5px);
+        }
+
+        .option input {
+            margin-left: 15px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .exam-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+
+        /* شاشة النتائج */
+        .result-card {
+            text-align: center;
+            padding: 50px 30px;
+        }
+
+        .result-icon {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 60px;
+            color: white;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .result-icon.success {
+            background: linear-gradient(135deg, var(--success-color), #2fb5e0);
+        }
+
+        .result-icon.warning {
+            background: linear-gradient(135deg, var(--warning-color), #e5176e);
+        }
+
+        .result-icon.danger {
+            background: linear-gradient(135deg, var(--danger-color), #5d08a0);
+        }
+
+        .score {
+            font-size: 70px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .score-percentage {
+            font-size: 28px;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .answers-review {
+            text-align: right;
+            margin-top: 40px;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .answer-item {
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-right: 5px solid transparent;
+        }
+
+        .answer-item.correct {
+            background-color: rgba(76, 201, 240, 0.1);
+            border-right-color: var(--success-color);
+        }
+
+        .answer-item.incorrect {
+            background-color: rgba(247, 37, 133, 0.1);
+            border-right-color: var(--warning-color);
+        }
+
+        /* أنظمة التصميم المتجاوب */
+        @media (max-width: 1200px) {
+            .sidebar {
+                width: 250px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .dashboard {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+                order: 2;
+                padding: 15px 0;
+            }
+            
+            .sidebar-header {
+                padding: 0 20px 20px;
+            }
+            
+            .sidebar-menu {
+                display: flex;
+                overflow-x: auto;
+                padding: 0 20px;
+            }
+            
+            .sidebar-menu li {
+                flex: 0 0 auto;
+                margin-bottom: 0;
+            }
+            
+            .sidebar-menu a {
+                white-space: nowrap;
+                border-right: none;
+                border-bottom: 4px solid transparent;
+                padding: 15px;
+            }
+            
+            .sidebar-menu a:hover, .sidebar-menu a.active {
+                border-right: none;
+                border-bottom-color: var(--student-color);
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .exam-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .exam-actions {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .exam-actions .btn {
+                width: 100%;
+            }
+            
+            .page-title {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
+            
+            .action-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .login-container {
+                padding: 10px;
+            }
+            
+            .login-content {
+                padding: 0 20px 20px;
+            }
+            
+            .user-type-selector {
+                flex-direction: column;
+            }
+            
+            .user-type-btn:not(:last-child) {
+                margin-left: 0;
+                margin-bottom: 10px;
+            }
+        }
+
+        /* تخصيصات إضافية */
+        .welcome-message {
+            background: linear-gradient(135deg, var(--primary-color), #3a56e4);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(67, 97, 238, 0.3);
+        }
+        
+        .welcome-message h3 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+        
+        .welcome-message p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        
+        .feature-card {
+            display: flex;
+            align-items: center;
+            padding: 25px;
+            background: white;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(67, 97, 238, 0.1);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary-color), #3a56e4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            margin-left: 20px;
+        }
+        
+        .feature-content h4 {
+            color: var(--secondary-color);
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        
+        .feature-content p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <!-- صفحة تسجيل الدخول -->
+    <div id="loginPage" class="login-page">
+        <div class="login-container">
+            <div class="login-card card">
+                <div class="login-header">
+                    <h1><i class="fas fa-graduation-cap"></i> SmartExam</h1>
+                    <p>نظام إدارة الاختبارات الإلكترونية المتكامل</p>
+                </div>
+                
+                <div class="login-content">
+                    <div class="user-type-selector">
+                        <div class="user-type-btn" id="adminBtn" onclick="selectUserType('admin')">
+                            <i class="fas fa-user-shield"></i>
+                            <span>مدير النظام</span>
+                        </div>
+                        <div class="user-type-btn" id="teacherBtn" onclick="selectUserType('teacher')">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                            <span>مدرس</span>
+                        </div>
+                        <div class="user-type-btn active" id="studentBtn" onclick="selectUserType('student')">
+                            <i class="fas fa-user-graduate"></i>
+                            <span>طالب</span>
+                        </div>
+                    </div>
+                    
+                    <form class="login-form" id="loginForm">
+                        <div class="form-group">
+                            <label for="email"><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
+                            <input type="email" id="email" placeholder="أدخل بريدك الإلكتروني" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password"><i class="fas fa-lock"></i> كلمة المرور</label>
+                            <input type="password" id="password" placeholder="أدخل كلمة المرور" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="userType"><i class="fas fa-user-tag"></i> نوع الحساب</label>
+                            <select id="userType">
+                                <option value="student">طالب</option>
+                                <option value="teacher">مدرس</option>
+                                <option value="admin">مدير</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 15px; margin-top: 10px;">
+                            <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
+                        </button>
+                    </form>
+                    
+                    <div style="margin-top: 25px; font-size: 14px; color: var(--text-secondary); background: rgba(67, 97, 238, 0.05); padding: 15px; border-radius: 10px;">
+                        <p style="font-weight: 600; margin-bottom: 10px;"><i class="fas fa-info-circle"></i> للحسابات التجريبية، استخدم:</p>
+                        <ul style="text-align: right; padding-right: 20px; list-style: none;">
+                            <li style="margin-bottom: 8px;"><strong>مدير:</strong> admin@smartschool.edu / password</li>
+                            <li style="margin-bottom: 8px;"><strong>مدرس:</strong> teacher@smartschool.edu / password</li>
+                            <li><strong>طالب:</strong> student@smartschool.edu / password</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- لوحة التحكم الرئيسية -->
+    <div id="dashboard" style="display: none;">
+        <!-- رأس الصفحة -->
+        <header class="header">
+            <div class="container header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h2>SmartExam</h2>
+                        <p>نظام إدارة الاختبارات الإلكترونية</p>
+                    </div>
+                </div>
+                
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">
+                        <!-- سيتم تعبئته ديناميكيًا -->
+                    </div>
+                    <div class="user-details">
+                        <span id="loggedInUserName">عيسى شايع</span>
+                        <span id="loggedInUserType" class="user-type-badge badge-admin">مدير</span>
+                    </div>
+                    <button class="btn btn-warning" onclick="logout()" style="margin-right: 15px;">
+                        <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+                    </button>
+                </div>
+            </div>
+        </header>
+        
+        <!-- لوحة التحكم -->
+        <div class="dashboard">
+            <!-- القائمة الجانبية -->
+            <nav class="sidebar">
+                <div class="sidebar-header">
+                    <h3><i class="fas fa-bars"></i> القائمة الرئيسية</h3>
+                </div>
+                <ul class="sidebar-menu" id="sidebarMenu">
+                    <!-- سيتم ملء القائمة ديناميكيًا حسب نوع المستخدم -->
+                </ul>
+            </nav>
+            
+            <!-- المحتوى الرئيسي -->
+            <main class="main-content">
+                <div class="container">
+                    <!-- سيتم ملء المحتوى ديناميكيًا -->
+                    <div id="mainContent">
+                        <div class="page-title">
+                            <h2 id="pageTitle">لوحة التحكم</h2>
+                            <p id="currentDate">تاريخ اليوم: </p>
+                        </div>
+                        
+                        <div id="dashboardContent">
+                            <!-- سيتم ملء محتوى لوحة التحكم حسب نوع المستخدم -->
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- شاشة أداء الاختبار -->
+    <div id="examScreen" style="display: none;">
+        <!-- رأس الصفحة -->
+        <header class="header">
+            <div class="container header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h2>SmartExam</h2>
+                        <p>أداء الاختبار</p>
+                    </div>
+                </div>
+                
+                <div class="user-info">
+                    <div class="timer" id="examTimer">
+                        <i class="fas fa-clock"></i> 30:00
+                    </div>
+                    <button class="btn btn-danger" onclick="exitExam()" style="margin-right: 15px;">
+                        <i class="fas fa-times"></i> الخروج
+                    </button>
+                </div>
+            </div>
+        </header>
+        
+        <!-- محتوى الاختبار -->
+        <div class="container exam-container">
+            <div id="examContent">
+                <!-- سيتم ملء محتوى الاختبار ديناميكيًا -->
+            </div>
+        </div>
+    </div>
+
+    <!-- شاشة عرض النتائج -->
+    <div id="resultScreen" style="display: none;">
+        <!-- رأس الصفحة -->
+        <header class="header">
+            <div class="container header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h2>SmartExam</h2>
+                        <p>نتيجة الاختبار</p>
+                    </div>
+                </div>
+                
+                <div class="user-info">
+                    <span id="resultTitle">النتيجة</span>
+                    <button class="btn btn-primary" onclick="goToDashboard()" style="margin-right: 15px;">
+                        <i class="fas fa-home"></i> العودة للرئيسية
+                    </button>
+                </div>
+            </div>
+        </header>
+        
+        <!-- محتوى النتائج -->
+        <div class="container">
+            <div id="resultContent">
+                <!-- سيتم ملء محتوى النتائج ديناميكيًا -->
+            </div>
+        </div>
+    </div>
+
+    <!-- شاشة إنشاء اختبار -->
+    <div id="createExamScreen" style="display: none;">
+        <!-- رأس الصفحة -->
+        <header class="header">
+            <div class="container header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h2>SmartExam</h2>
+                        <p>إنشاء اختبار جديد</p>
+                    </div>
+                </div>
+                
+                <div class="user-info">
+                    <span>إنشاء اختبار</span>
+                    <button class="btn btn-primary" onclick="goToDashboard()" style="margin-right: 15px;">
+                        <i class="fas fa-home"></i> العودة
+                    </button>
+                </div>
+            </div>
+        </header>
+        
+        <!-- محتوى إنشاء الاختبار -->
+        <div class="container">
+            <div id="createExamContent">
+                <!-- سيتم ملء محتوى إنشاء الاختبار ديناميكيًا -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // بيانات التطبيق الأساسية
+        let currentUser = null;
+        let currentPage = 'dashboard';
+        let examData = null;
+        let examAnswers = {};
+        let examTimer = null;
+        let examTimeLeft = 0;
+        let currentExam = null;
+        let currentQuestionIndex = 0;
+
+        // بيانات أولية للمستخدمين (لتجربة التطبيق)
+        const sampleUsers = {
+            'admin@smartschool.edu': { id: 1, name: 'عيسى شايع', type: 'admin', password: 'password' },
+            'teacher@smartschool.edu': { id: 2, name: 'محمد حسن', type: 'teacher', password: 'password' },
+            'student@smartschool.edu': { id: 3, name: 'سارة أحمد', type: 'student', password: 'password' }
+        };
+
+        // بيانات الاختبارات (لتجربة التطبيق)
+        const sampleExams = [
+            {
+                id: 1,
+                title: 'اختبار مادة الرياضيات - الفصل الأول',
+                subject: 'الرياضيات',
+                teacher: 'محمد حسن',
+                group: 'المجموعة أ',
+                duration: 30, // دقائق
+                startTime: '2024-12-10T10:00:00',
+                endTime: '2024-12-10T18:00:00',
+                questions: [
+                    {
+                        id: 1,
+                        text: 'ما هو ناتج جمع ٥ + ٧؟',
+                        type: 'mcq',
+                        options: ['١٠', '١١', '١٢', '١٣'],
+                        correctAnswer: 2
+                    },
+                    {
+                        id: 2,
+                        text: 'ما هو العدد الأولي من بين الأعداد التالية؟',
+                        type: 'mcq',
+                        options: ['٩', '١٥', '١٧', '٢١'],
+                        correctAnswer: 2
+                    },
+                    {
+                        id: 3,
+                        text: 'المثلث المتساوي الأضلاع جميع زواياه متساوية.',
+                        type: 'truefalse',
+                        correctAnswer: true
+                    },
+                    {
+                        id: 4,
+                        text: 'ما هو محيط الدائرة التي نصف قطرها ٧ سم؟ (ط = ٢٢/٧)',
+                        type: 'essay',
+                        maxScore: 5
+                    }
+                ],
+                totalScore: 15
+            },
+            {
+                id: 2,
+                title: 'اختبار مادة اللغة العربية',
+                subject: 'اللغة العربية',
+                teacher: 'محمد حسن',
+                group: 'المجموعة ب',
+                duration: 45,
+                startTime: '2024-12-12T09:00:00',
+                endTime: '2024-12-12T17:00:00',
+                questions: [
+                    {
+                        id: 1,
+                        text: 'ما هو جمع كلمة "كتاب"؟',
+                        type: 'mcq',
+                        options: ['كتب', 'كتابات', 'كتابان', 'مكتبة'],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 2,
+                        text: 'الجملة الفعلية تبدأ بفعل.',
+                        type: 'truefalse',
+                        correctAnswer: true
+                    }
+                ],
+                totalScore: 10
+            }
+        ];
+
+        // بيانات الطلاب والمجموعات والمواد (لتجربة التطبيق)
+        const sampleData = {
+            students: [
+                { id: 1, name: 'سارة أحمد', email: 'student@smartschool.edu', group: 'المجموعة أ', major: 'تقنية المعلومات', level: 'الثاني', gpa: 3.5 },
+                { id: 2, name: 'علي محمود', email: 'ali@smartschool.edu', group: 'المجموعة أ', major: 'تقنية المعلومات', level: 'الثاني', gpa: 3.2 },
+                { id: 3, name: 'فاطمة خالد', email: 'fatima@smartschool.edu', group: 'المجموعة ب', major: 'المحاسبة', level: 'الثالث', gpa: 3.8 }
+            ],
+            groups: [
+                { id: 1, name: 'المجموعة أ', subject: 'الرياضيات', teacher: 'محمد حسن', studentsCount: 25 },
+                { id: 2, name: 'المجموعة ب', subject: 'اللغة العربية', teacher: 'محمد حسن', studentsCount: 30 },
+                { id: 3, name: 'المجموعة ج', subject: 'الفيزياء', teacher: 'أحمد سعيد', studentsCount: 22 }
+            ],
+            subjects: [
+                { id: 1, name: 'الرياضيات', code: 'MATH101', credits: 3, department: 'تقنية المعلومات' },
+                { id: 2, name: 'اللغة العربية', code: 'ARAB101', credits: 2, department: 'اللغة العربية' },
+                { id: 3, name: 'الفيزياء', code: 'PHYS101', credits: 4, department: 'الهندسة' }
+            ],
+            universities: [
+                { id: 1, name: 'جامعة التقنية والعلوم', location: 'الرياض', established: 2000 },
+                { id: 2, name: 'جامعة النجاح', location: 'جدة', established: 1995 }
+            ],
+            majors: [
+                { id: 1, name: 'تقنية المعلومات', department: 'علوم الحاسب', university: 'جامعة التقنية والعلوم' },
+                { id: 2, name: 'المحاسبة', department: 'إدارة الأعمال', university: 'جامعة التقنية والعلوم' },
+                { id: 3, name: 'الهندسة الكهربائية', department: 'الهندسة', university: 'جامعة النجاح' }
+            ]
+        };
+
+        // تهيئة التطبيق عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            // تحديث التاريخ الحالي
+            const currentDate = new Date().toLocaleDateString('ar-SA', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            document.getElementById('currentDate').textContent = `تاريخ اليوم: ${currentDate}`;
+            
+            // إضافة حدث لتسجيل الدخول
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                login();
+            });
+            
+            // تحديد نوع المستخدم الافتراضي
+            selectUserType('student');
+            
+            // تحميل البيانات من localStorage إذا كانت موجودة
+            loadDataFromLocalStorage();
+        });
+
+        // تحديد نوع المستخدم
+        function selectUserType(type) {
+            document.querySelectorAll('.user-type-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            document.getElementById(`${type}Btn`).classList.add('active');
+            document.getElementById('userType').value = type;
+        }
+
+        // تسجيل الدخول
+        function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const userType = document.getElementById('userType').value;
+            
+            // التحقق من بيانات المستخدم
+            if (sampleUsers[email] && sampleUsers[email].password === password && sampleUsers[email].type === userType) {
+                currentUser = {
+                    email: email,
+                    name: sampleUsers[email].name,
+                    type: userType,
+                    id: sampleUsers[email].id
+                };
+                
+                // حفظ بيانات المستخدم في localStorage
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                
+                // عرض لوحة التحكم
+                showDashboard();
+            } else {
+                alert('بيانات الدخول غير صحيحة. الرجاء المحاولة مرة أخرى.');
+            }
+        }
+
+        // تسجيل الخروج
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            
+            // إيقاف أي مؤقتات نشطة
+            if (examTimer) {
+                clearInterval(examTimer);
+            }
+            
+            // العودة إلى صفحة تسجيل الدخول
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('loginPage').style.display = 'flex';
+            
+            // إعادة تعيين النموذج
+            document.getElementById('loginForm').reset();
+        }
+
+        // تحميل البيانات من localStorage
+        function loadDataFromLocalStorage() {
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                showDashboard();
+            }
+        }
+
+        // عرض لوحة التحكم
+        function showDashboard() {
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            document.getElementById('examScreen').style.display = 'none';
+            document.getElementById('resultScreen').style.display = 'none';
+            document.getElementById('createExamScreen').style.display = 'none';
+            
+            // تحديث معلومات المستخدم في الرأس
+            document.getElementById('loggedInUserName').textContent = currentUser.name;
+            
+            // تحديث شارة نوع المستخدم
+            const userTypeBadge = document.getElementById('loggedInUserType');
+            userTypeBadge.textContent = currentUser.type === 'admin' ? 'مدير' : 
+                                         currentUser.type === 'teacher' ? 'مدرس' : 'طالب';
+            userTypeBadge.className = `user-type-badge badge-${currentUser.type}`;
+            
+            // تحديث الصورة الرمزية للمستخدم
+            const userAvatar = document.getElementById('userAvatar');
+            const nameParts = currentUser.name.split(' ');
+            const initials = nameParts.length > 1 ? 
+                nameParts[0].charAt(0) + nameParts[1].charAt(0) : 
+                nameParts[0].charAt(0);
+            userAvatar.textContent = initials;
+            
+            // تحديث القائمة الجانبية والمحتوى الرئيسي
+            updateSidebar();
+            loadDashboardContent();
+        }
+
+        // تحديث القائمة الجانبية حسب نوع المستخدم
+        function updateSidebar() {
+            const sidebarMenu = document.getElementById('sidebarMenu');
+            sidebarMenu.innerHTML = '';
+            
+            let menuItems = [];
+            
+            if (currentUser.type === 'admin') {
+                menuItems = [
+                    { id: 'dashboard', icon: 'fas fa-tachometer-alt', text: 'لوحة التحكم', active: currentPage === 'dashboard' },
+                    { id: 'universities', icon: 'fas fa-university', text: 'إدارة الجامعات', active: currentPage === 'universities' },
+                    { id: 'majors', icon: 'fas fa-graduation-cap', text: 'إدارة التخصصات', active: currentPage === 'majors' },
+                    { id: 'subjects', icon: 'fas fa-book', text: 'إدارة المواد', active: currentPage === 'subjects' },
+                    { id: 'groups', icon: 'fas fa-users', text: 'إدارة المجموعات', active: currentPage === 'groups' },
+                    { id: 'students', icon: 'fas fa-user-graduate', text: 'إدارة الطلاب', active: currentPage === 'students' },
+                    { id: 'users', icon: 'fas fa-user-cog', text: 'إدارة المستخدمين', active: currentPage === 'users' },
+                    { id: 'reports', icon: 'fas fa-chart-bar', text: 'التقارير والإحصائيات', active: currentPage === 'reports' }
+                ];
+            } else if (currentUser.type === 'teacher') {
+                menuItems = [
+                    { id: 'dashboard', icon: 'fas fa-tachometer-alt', text: 'لوحة التحكم', active: currentPage === 'dashboard' },
+                    { id: 'mySubjects', icon: 'fas fa-book', text: 'موادي الدراسية', active: currentPage === 'mySubjects' },
+                    { id: 'myGroups', icon: 'fas fa-users', text: 'مجموعاتي', active: currentPage === 'myGroups' },
+                    { id: 'createExam', icon: 'fas fa-plus-circle', text: 'إنشاء اختبار جديد', active: currentPage === 'createExam' },
+                    { id: 'myExams', icon: 'fas fa-clipboard-list', text: 'اختباراتي', active: currentPage === 'myExams' },
+                    { id: 'results', icon: 'fas fa-chart-line', text: 'نتائج الطلاب', active: currentPage === 'results' }
+                ];
+            } else if (currentUser.type === 'student') {
+                menuItems = [
+                    { id: 'dashboard', icon: 'fas fa-tachometer-alt', text: 'لوحة التحكم', active: currentPage === 'dashboard' },
+                    { id: 'availableExams', icon: 'fas fa-clipboard-check', text: 'الاختبارات المتاحة', active: currentPage === 'availableExams' },
+                    { id: 'myResults', icon: 'fas fa-award', text: 'نتائجي', active: currentPage === 'myResults' },
+                    { id: 'myProfile', icon: 'fas fa-user', text: 'ملفي الشخصي', active: currentPage === 'myProfile' }
+                ];
+            }
+            
+            menuItems.forEach(item => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <a href="#" class="${item.active ? 'active' : ''}" onclick="navigateTo('${item.id}'); return false;">
+                        <i class="${item.icon}"></i> ${item.text}
+                    </a>
+                `;
+                sidebarMenu.appendChild(li);
+            });
+        }
+
+        // التنقل بين الصفحات
+        function navigateTo(page) {
+            currentPage = page;
+            updateSidebar();
+            
+            if (page === 'createExam') {
+                showCreateExamScreen();
+            } else {
+                loadDashboardContent();
+            }
+        }
+
+        // تحميل محتوى لوحة التحكم حسب الصفحة الحالية
+        function loadDashboardContent() {
+            const dashboardContent = document.getElementById('dashboardContent');
+            const pageTitle = document.getElementById('pageTitle');
+            
+            // تحديث عنوان الصفحة
+            pageTitle.textContent = getPageTitle(currentPage);
+            
+            if (currentPage === 'dashboard') {
+                loadDashboardHome();
+            } else if (currentPage === 'students' && currentUser.type === 'admin') {
+                loadStudentsManagement();
+            } else if (currentPage === 'subjects' && currentUser.type === 'admin') {
+                loadSubjectsManagement();
+            } else if (currentPage === 'groups' && currentUser.type === 'admin') {
+                loadGroupsManagement();
+            } else if (currentPage === 'availableExams' && currentUser.type === 'student') {
+                loadAvailableExams();
+            } else if (currentPage === 'myResults' && currentUser.type === 'student') {
+                loadStudentResults();
+            } else if (currentPage === 'myExams' && currentUser.type === 'teacher') {
+                loadTeacherExams();
+            } else if (currentPage === 'results' && currentUser.type === 'teacher') {
+                loadTeacherResults();
+            } else {
+                dashboardContent.innerHTML = `
+                    <div class="card">
+                        <h3 class="card-title">${getPageTitle(currentPage)}</h3>
+                        <p>هذه الصفحة قيد التطوير. سيتم إضافة المحتوى قريبًا.</p>
+                        <div style="text-align: center; margin-top: 30px;">
+                            <i class="fas fa-tools" style="font-size: 60px; color: var(--primary-color); opacity: 0.5;"></i>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // تحميل الصفحة الرئيسية للوحة التحكم
+        function loadDashboardHome() {
+            const dashboardContent = document.getElementById('dashboardContent');
+            
+            if (currentUser.type === 'admin') {
+                dashboardContent.innerHTML = `
+                    <div class="welcome-message">
+                        <h3>مرحباً ${currentUser.name} 👋</h3>
+                        <p>نظام SmartExam يمنحك التحكم الكامل في إدارة الاختبارات الإلكترونية والمستخدمين</p>
+                    </div>
+                    
+                    <div class="stats-container">
+                        <div class="stat-card">
+                            <div class="stat-icon admin">
+                                <i class="fas fa-university"></i>
+                            </div>
+                            <h3>${sampleData.universities.length}</h3>
+                            <p>جامعة</p>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon student">
+                                <i class="fas fa-user-graduate"></i>
+                            </div>
+                            <h3>${sampleData.students.length}</h3>
+                            <p>طالب</p>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon teacher">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                            </div>
+                            <h3>5</h3>
+                            <p>مدرس</p>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon primary">
+                                <i class="fas fa-clipboard-list"></i>
+                            </div>
+                            <h3>${sampleExams.length}</h3>
+                            <p>اختبار</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 class="card-title">آخر الاختبارات المضافة</h3>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>اسم الاختبار</th>
+                                        <th>المادة</th>
+                                        <th>المدرس</th>
+                                        <th>المجموعة</th>
+                                        <th>تاريخ البدء</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${sampleExams.slice(0, 3).map(exam => `
+                                        <tr>
+                                            <td>${exam.title}</td>
+                                            <td>${exam.subject}</td>
+                                            <td>${exam.teacher}</td>
+                                            <td>${exam.group}</td>
+                                            <td>${new Date(exam.startTime).toLocaleDateString('ar-SA')}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 class="card-title">إحصائيات سريعة</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="fas fa-graduation-cap"></i>
+                                </div>
+                                <div class="feature-content">
+                                    <h4>التخصصات</h4>
+                                    <p>${sampleData.majors.slice(0, 3).map(major => `${major.name} (${major.department})`).join('، ')}</p>
+                                </div>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="feature-content">
+                                    <h4>المجموعات</h4>
+                                    <p>${sampleData.groups.slice(0, 3).map(group => `${group.name} - ${group.subject}`).join('، ')}</p>
+                                </div>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="fas fa-book"></i>
+                                </div>
+                                <div class="feature-content">
+                                    <h4>المواد الدراسية</h4>
+                                    <p>${sampleData.subjects.slice(0, 3).map(subject => `${subject.name} (${subject.code})`).join('، ')}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (currentUser.type === 'teacher') {
+                dashboardContent.innerHTML = `
+                    <div class="welcome-message">
+                        <h3>مرحباً ${currentUser.name} 👋</h3>
+                        <p>نظام SmartExam يساعدك في إنشاء وإدارة الاختبارات الإلكترونية بسهولة</p>
+                    </div>
+                    
+                    <div class="stats-container">
+                        <div class="stat-card">
+                            <div class="stat-icon teacher">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <h3>3</h3>
+                            <p>مادة</p>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon primary">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h3>${sampleData.groups.filter(g => g.teacher === currentUser.name).length}</h3>
+                            <p>مجموعة</p>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon student">
+                                <i class="fas fa-clipboard-list"></i>
+                            </div>
+                            <h3>${sampleExams.filter(e => e.teacher === currentUser.name).length}</h3>
+                            <p>اختبار</p>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon admin">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h3>75%</h3>
+                            <p>متوسط النجاح</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 class="card-title">اختباراتي الأخيرة</h3>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>اسم الاختبار</th>
+                                        <th>المادة</th>
+                                        <th>المجموعة</th>
+                                        <th>تاريخ البدء</th>
+                                        <th>الإجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${sampleExams.filter(e => e.teacher === currentUser.name).map(exam => `
+                                        <tr>
+                                            <td>${exam.title}</td>
+                                            <td>${exam.subject}</td>
+                                            <td>${exam.group}</td>
+                                            <td>${new Date(exam.startTime).toLocaleDateString('ar-SA')}</td>
+                                            <td class="actions">
+                                                <button class="action-btn btn-primary" onclick="viewExamResults(${exam.id})">
+                                                    <i class="fas fa-chart-bar"></i> النتائج
+                                                </button>
+                                                <button class="action-btn btn-warning">
+                                                    <i class="fas fa-edit"></i> تعديل
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+            } else if (currentUser.type === 'student') {
+                dashboardContent.innerHTML = `
+                    <div class="welcome-message">
+                        <h3>مرحباً ${currentUser.name} 👋</h3>
+                        <p>نظام SmartExam يساعدك في أداء الاختبارات الإلكترونية ومتابعة نتائجك</p>
+                    </div>
+                    
+                    <div class="stats-container">
+                        <div class="stat-card">
+                            <div class="stat-icon student">
+                                <i class="fas fa-clipboard-check"></i>
+                            </div>
+                            <h3>2</h3>
+                            <p>اختبار متاح</p>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon primary">
+                                <i class="fas fa-award"></i>
+                            </div>
+                            <h3>85%</h3>
+                            <p>متوسط درجاتك</p>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon teacher">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <h3>5</h3>
+                            <p>مادة</p>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon admin">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h3>${sampleData.groups.filter(g => g.name === sampleData.students.find(s => s.id === currentUser.id)?.group).length}</h3>
+                            <p>مجموعة</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 class="card-title">اختباراتي القادمة</h3>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>اسم الاختبار</th>
+                                        <th>المادة</th>
+                                        <th>المدرس</th>
+                                        <th>تاريخ البدء</th>
+                                        <th>الإجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${sampleExams.slice(0, 2).map(exam => `
+                                        <tr>
+                                            <td>${exam.title}</td>
+                                            <td>${exam.subject}</td>
+                                            <td>${exam.teacher}</td>
+                                            <td>${new Date(exam.startTime).toLocaleDateString('ar-SA')}</td>
+                                            <td>
+                                                <button class="btn btn-primary" onclick="startExam(${exam.id})">
+                                                    <i class="fas fa-play-circle"></i> بدء الاختبار
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 class="card-title">آخر النتائج</h3>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>اسم الاختبار</th>
+                                        <th>المادة</th>
+                                        <th>الدرجة</th>
+                                        <th>النسبة</th>
+                                        <th>التاريخ</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>اختبار الرياضيات النصفي</td>
+                                        <td>الرياضيات</td>
+                                        <td>18/20</td>
+                                        <td><span class="badge badge-success">90%</span></td>
+                                        <td>2024-11-15</td>
+                                    </tr>
+                                    <tr>
+                                        <td>اختبار اللغة العربية</td>
+                                        <td>اللغة العربية</td>
+                                        <td>15/20</td>
+                                        <td><span class="badge badge-warning">75%</span></td>
+                                        <td>2024-11-10</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // تحميل إدارة الطلاب (للمدير)
+        function loadStudentsManagement() {
+            const dashboardContent = document.getElementById('dashboardContent');
+            
+            dashboardContent.innerHTML = `
+                <div class="page-title">
+                    <h2>إدارة الطلاب</h2>
+                    <div>
+                        <button class="btn btn-success" onclick="addNewStudent()">
+                            <i class="fas fa-plus"></i> إضافة طالب جديد
+                        </button>
+                        <button class="btn btn-primary" style="margin-right: 10px;">
+                            <i class="fas fa-file-export"></i> استيراد من Excel
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div style="margin-bottom: 20px;">
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="searchStudent" placeholder="بحث عن طالب..." style="padding: 12px; flex: 1; border-radius: 10px; border: 2px solid var(--border-color);">
+                            <button class="btn btn-primary">
+                                <i class="fas fa-search"></i> بحث
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>الرقم</th>
+                                    <th>اسم الطالب</th>
+                                    <th>البريد الإلكتروني</th>
+                                    <th>التخصص</th>
+                                    <th>المستوى</th>
+                                    <th>المجموعة</th>
+                                    <th>المعدل</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${sampleData.students.map(student => `
+                                    <tr>
+                                        <td>${student.id}</td>
+                                        <td><strong>${student.name}</strong></td>
+                                        <td>${student.email}</td>
+                                        <td><span class="badge" style="background: rgba(67, 97, 238, 0.1); color: var(--primary-color); padding: 5px 10px; border-radius: 20px;">${student.major}</span></td>
+                                        <td>${student.level}</td>
+                                        <td>${student.group}</td>
+                                        <td><strong>${student.gpa}</strong></td>
+                                        <td class="actions">
+                                            <button class="action-btn btn-primary">
+                                                <i class="fas fa-eye"></i> عرض
+                                            </button>
+                                            <button class="action-btn btn-warning">
+                                                <i class="fas fa-edit"></i> تعديل
+                                            </button>
+                                            <button class="action-btn btn-danger">
+                                                <i class="fas fa-trash"></i> حذف
+                                            </button>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        // تحميل إدارة المواد (للمدير)
+        function loadSubjectsManagement() {
+            const dashboardContent = document.getElementById('dashboardContent');
+            
+            dashboardContent.innerHTML = `
+                <div class="page-title">
+                    <h2>إدارة المواد الدراسية</h2>
+                    <button class="btn btn-success" onclick="addNewSubject()">
+                        <i class="fas fa-plus"></i> إضافة مادة جديدة
+                    </button>
+                </div>
+                
+                <div class="card">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>الرقم</th>
+                                    <th>اسم المادة</th>
+                                    <th>الكود</th>
+                                    <th>الساعات المعتمدة</th>
+                                    <th>القسم</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${sampleData.subjects.map(subject => `
+                                    <tr>
+                                        <td>${subject.id}</td>
+                                        <td><strong>${subject.name}</strong></td>
+                                        <td><span class="badge" style="background: rgba(76, 201, 240, 0.1); color: var(--success-color); padding: 5px 10px; border-radius: 20px;">${subject.code}</span></td>
+                                        <td>${subject.credits}</td>
+                                        <td>${subject.department}</td>
+                                        <td class="actions">
+                                            <button class="action-btn btn-primary">
+                                                <i class="fas fa-eye"></i> عرض
+                                            </button>
+                                            <button class="action-btn btn-warning">
+                                                <i class="fas fa-edit"></i> تعديل
+                                            </button>
+                                            <button class="action-btn btn-danger">
+                                                <i class="fas fa-trash"></i> حذف
+                                            </button>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        // تحميل إدارة المجموعات (للمدير)
+        function loadGroupsManagement() {
+            const dashboardContent = document.getElementById('dashboardContent');
+            
+            dashboardContent.innerHTML = `
+                <div class="page-title">
+                    <h2>إدارة المجموعات الطلابية</h2>
+                    <button class="btn btn-success" onclick="addNewGroup()">
+                        <i class="fas fa-plus"></i> إضافة مجموعة جديدة
+                    </button>
+                </div>
+                
+                <div class="card">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>الرقم</th>
+                                    <th>اسم المجموعة</th>
+                                    <th>المادة</th>
+                                    <th>المدرس</th>
+                                    <th>عدد الطلاب</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${sampleData.groups.map(group => `
+                                    <tr>
+                                        <td>${group.id}</td>
+                                        <td><strong>${group.name}</strong></td>
+                                        <td>${group.subject}</td>
+                                        <td>${group.teacher}</td>
+                                        <td><span class="badge" style="background: rgba(247, 37, 133, 0.1); color: var(--warning-color); padding: 5px 10px; border-radius: 20px;">${group.studentsCount}</span></td>
+                                        <td class="actions">
+                                            <button class="action-btn btn-primary">
+                                                <i class="fas fa-users"></i> عرض الطلاب
+                                            </button>
+                                            <button class="action-btn btn-warning">
+                                                <i class="fas fa-edit"></i> تعديل
+                                            </button>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        // تحميل الاختبارات المتاحة (للطالب)
+        function loadAvailableExams() {
+            const dashboardContent = document.getElementById('dashboardContent');
+            
+            dashboardContent.innerHTML = `
+                <div class="page-title">
+                    <h2>الاختبارات المتاحة</h2>
+                </div>
+                
+                <div class="card">
+                    <h3 class="card-title">الاختبارات المتاحة حالياً</h3>
+                    <p>فيما يلي قائمة بالاختبارات المتاحة لك حالياً:</p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; margin-top: 25px;">
+                        ${sampleExams.map(exam => `
+                            <div class="card" style="padding: 25px; border-left: 5px solid var(--primary-color);">
+                                <h3 style="color: var(--secondary-color); margin-bottom: 15px;">${exam.title}</h3>
+                                <div style="display: grid; gap: 10px;">
+                                    <p><i class="fas fa-book" style="color: var(--primary-color);"></i> <strong>المادة:</strong> ${exam.subject}</p>
+                                    <p><i class="fas fa-chalkboard-teacher" style="color: var(--teacher-color);"></i> <strong>المدرس:</strong> ${exam.teacher}</p>
+                                    <p><i class="fas fa-clock" style="color: var(--warning-color);"></i> <strong>المدة:</strong> ${exam.duration} دقيقة</p>
+                                    <p><i class="fas fa-calendar-alt" style="color: var(--success-color);"></i> <strong>وقت البدء:</strong> ${new Date(exam.startTime).toLocaleString('ar-SA')}</p>
+                                    <p><i class="fas fa-calendar-times" style="color: var(--danger-color);"></i> <strong>وقت الانتهاء:</strong> ${new Date(exam.endTime).toLocaleString('ar-SA')}</p>
+                                </div>
+                                
+                                <div style="margin-top: 20px;">
+                                    <button class="btn btn-primary" style="width: 100%;" onclick="startExam(${exam.id})">
+                                        <i class="fas fa-play-circle"></i> بدء الاختبار
+                                    </button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // تحميل نتائج الطالب
+        function loadStudentResults() {
+            const dashboardContent = document.getElementById('dashboardContent');
+            
+            dashboardContent.innerHTML = `
+                <div class="page-title">
+                    <h2>نتائجي</h2>
+                </div>
+                
+                <div class="card">
+                    <h3 class="card-title">سجل النتائج</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>اسم الاختبار</th>
+                                    <th>المادة</th>
+                                    <th>الدرجة</th>
+                                    <th>النسبة</th>
+                                    <th>التاريخ</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>اختبار الرياضيات النصفي</td>
+                                    <td>الرياضيات</td>
+                                    <td>18/20</td>
+                                    <td><span class="badge" style="background: rgba(76, 201, 240, 0.2); color: var(--success-color); padding: 5px 10px; border-radius: 20px;">90%</span></td>
+                                    <td>2024-11-15</td>
+                                    <td>
+                                        <button class="btn btn-primary" onclick="viewResultDetails(1)">
+                                            <i class="fas fa-eye"></i> عرض التفاصيل
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>اختبار اللغة العربية</td>
+                                    <td>اللغة العربية</td>
+                                    <td>15/20</td>
+                                    <td><span class="badge" style="background: rgba(247, 37, 133, 0.2); color: var(--warning-color); padding: 5px 10px; border-radius: 20px;">75%</span></td>
+                                    <td>2024-11-10</td>
+                                    <td>
+                                        <button class="btn btn-primary" onclick="viewResultDetails(2)">
+                                            <i class="fas fa-eye"></i> عرض التفاصيل
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>اختبار الفيزياء العملي</td>
+                                    <td>الفيزياء</td>
+                                    <td>22/25</td>
+                                    <td><span class="badge" style="background: rgba(76, 201, 240, 0.2); color: var(--success-color); padding: 5px 10px; border-radius: 20px;">88%</span></td>
+                                    <td>2024-10-28</td>
+                                    <td>
+                                        <button class="btn btn-primary" onclick="viewResultDetails(3)">
+                                            <i class="fas fa-eye"></i> عرض التفاصيل
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 class="card-title">إحصائيات أدائي</h3>
+                    <div style="display: flex; justify-content: space-around; flex-wrap: wrap; text-align: center; gap: 20px;">
+                        <div style="flex: 1; min-width: 150px;">
+                            <div class="stat-icon success" style="width: 60px; height: 60px; margin: 0 auto 15px;">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div style="font-size: 32px; font-weight: 800; color: var(--success-color);">85%</div>
+                            <div>متوسط النجاح</div>
+                        </div>
+                        <div style="flex: 1; min-width: 150px;">
+                            <div class="stat-icon primary" style="width: 60px; height: 60px; margin: 0 auto 15px;">
+                                <i class="fas fa-clipboard-list"></i>
+                            </div>
+                            <div style="font-size: 32px; font-weight: 800; color: var(--primary-color);">12</div>
+                            <div>عدد الاختبارات</div>
+                        </div>
+                        <div style="flex: 1; min-width: 150px;">
+                            <div class="stat-icon warning" style="width: 60px; height: 60px; margin: 0 auto 15px;">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div style="font-size: 32px; font-weight: 800; color: var(--warning-color);">3.7</div>
+                            <div>المعدل التراكمي</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // تحميل اختبارات المدرس
+        function loadTeacherExams() {
+            const dashboardContent = document.getElementById('dashboardContent');
+            
+            dashboardContent.innerHTML = `
+                <div class="page-title">
+                    <h2>اختباراتي</h2>
+                    <button class="btn btn-success" onclick="navigateTo('createExam')">
+                        <i class="fas fa-plus"></i> إنشاء اختبار جديد
+                    </button>
+                </div>
+                
+                <div class="card">
+                    <h3 class="card-title">قائمة الاختبارات</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>اسم الاختبار</th>
+                                    <th>المادة</th>
+                                    <th>المجموعة</th>
+                                    <th>عدد الأسئلة</th>
+                                    <th>تاريخ البدء</th>
+                                    <th>حالة الاختبار</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${sampleExams.filter(e => e.teacher === currentUser.name).map(exam => `
+                                    <tr>
+                                        <td><strong>${exam.title}</strong></td>
+                                        <td>${exam.subject}</td>
+                                        <td>${exam.group}</td>
+                                        <td>${exam.questions.length}</td>
+                                        <td>${new Date(exam.startTime).toLocaleDateString('ar-SA')}</td>
+                                        <td>
+                                            <span class="badge" style="background: ${new Date() < new Date(exam.endTime) ? 'rgba(76, 201, 240, 0.2)' : 'rgba(247, 37, 133, 0.2)'}; color: ${new Date() < new Date(exam.endTime) ? 'var(--success-color)' : 'var(--warning-color)'}; padding: 8px 15px; border-radius: 20px; font-weight: 600;">
+                                                ${new Date() < new Date(exam.endTime) ? 'نشط' : 'منتهي'}
+                                            </span>
+                                        </td>
+                                        <td class="actions">
+                                            <button class="action-btn btn-primary" onclick="viewExamResults(${exam.id})">
+                                                <i class="fas fa-chart-bar"></i> النتائج
+                                            </button>
+                                            <button class="action-btn btn-warning">
+                                                <i class="fas fa-edit"></i> تعديل
+                                            </button>
+                                            <button class="action-btn btn-danger">
+                                                <i class="fas fa-trash"></i> حذف
+                                            </button>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        // تحميل نتائج الطلاب للمدرس
+        function loadTeacherResults() {
+            const dashboardContent = document.getElementById('dashboardContent');
+            
+            dashboardContent.innerHTML = `
+                <div class="page-title">
+                    <h2>نتائج الطلاب</h2>
+                </div>
+                
+                <div class="card">
+                    <h3 class="card-title">عرض نتائج الاختبارات</h3>
+                    <div style="margin-bottom: 25px; display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                        <select id="examSelect" style="padding: 12px; flex: 1; min-width: 250px; border-radius: 10px; border: 2px solid var(--border-color);">
+                            <option value="">اختر اختبار لعرض النتائج</option>
+                            ${sampleExams.filter(e => e.teacher === currentUser.name).map(exam => `
+                                <option value="${exam.id}">${exam.title}</option>
+                            `).join('')}
+                        </select>
+                        <button class="btn btn-primary" onclick="loadExamResults()">
+                            <i class="fas fa-eye"></i> عرض النتائج
+                        </button>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>اسم الطالب</th>
+                                    <th>البريد الإلكتروني</th>
+                                    <th>المجموعة</th>
+                                    <th>الدرجة</th>
+                                    <th>النسبة</th>
+                                    <th>حالة النجاح</th>
+                                    <th>التاريخ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="examResultsTable">
+                                <tr>
+                                    <td colspan="7" style="text-align: center; padding: 30px;">
+                                        <i class="fas fa-search" style="font-size: 40px; color: var(--border-color); margin-bottom: 15px; display: block;"></i>
+                                        اختر اختباراً لعرض النتائج
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 class="card-title">إحصائيات الاختبار</h3>
+                    <div id="examStats" style="display: flex; justify-content: space-around; flex-wrap: wrap; text-align: center; gap: 20px;">
+                        <div style="flex: 1; min-width: 150px;">
+                            <div class="stat-icon primary" style="width: 60px; height: 60px; margin: 0 auto 15px;">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div style="font-size: 32px; font-weight: 800; color: var(--primary-color);">0</div>
+                            <div>عدد الطلاب</div>
+                        </div>
+                        <div style="flex: 1; min-width: 150px;">
+                            <div class="stat-icon success" style="width: 60px; height: 60px; margin: 0 auto 15px;">
+                                <i class="fas fa-chart-pie"></i>
+                            </div>
+                            <div style="font-size: 32px; font-weight: 800; color: var(--success-color);">0%</div>
+                            <div>متوسط النجاح</div>
+                        </div>
+                        <div style="flex: 1; min-width: 150px;">
+                            <div class="stat-icon warning" style="width: 60px; height: 60px; margin: 0 auto 15px;">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div style="font-size: 32px; font-weight: 800; color: var(--warning-color);">0</div>
+                            <div>أعلى درجة</div>
+                        </div>
+                        <div style="flex: 1; min-width: 150px;">
+                            <div class="stat-icon danger" style="width: 60px; height: 60px; margin: 0 auto 15px;">
+                                <i class="fas fa-chart-area"></i>
+                            </div>
+                            <div style="font-size: 32px; font-weight: 800; color: var(--danger-color);">0</div>
+                            <div>أقل درجة</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // عرض نتائج اختبار معين
+        function loadExamResults() {
+            const examId = document.getElementById('examSelect').value;
+            if (!examId) return;
+            
+            const exam = sampleExams.find(e => e.id == examId);
+            if (!exam) return;
+            
+            // محاكاة بيانات النتائج
+            const mockResults = [
+                { studentName: 'سارة أحمد', email: 'student@smartschool.edu', group: exam.group, score: 18, total: exam.totalScore, date: exam.startTime },
+                { studentName: 'علي محمود', email: 'ali@smartschool.edu', group: exam.group, score: 15, total: exam.totalScore, date: exam.startTime },
+                { studentName: 'فاطمة خالد', email: 'fatima@smartschool.edu', group: exam.group, score: 12, total: exam.totalScore, date: exam.startTime },
+                { studentName: 'محمد علي', email: 'mohamed@smartschool.edu', group: exam.group, score: 20, total: exam.totalScore, date: exam.startTime },
+                { studentName: 'أحمد سعيد', email: 'ahmed@smartschool.edu', group: exam.group, score: 14, total: exam.totalScore, date: exam.startTime }
+            ];
+            
+            // تحديث جدول النتائج
+            const resultsTable = document.getElementById('examResultsTable');
+            resultsTable.innerHTML = mockResults.map(result => `
+                <tr>
+                    <td><strong>${result.studentName}</strong></td>
+                    <td>${result.email}</td>
+                    <td>${result.group}</td>
+                    <td><strong>${result.score}/${result.total}</strong></td>
+                    <td>
+                        <span class="badge" style="background: ${result.score / result.total >= 0.5 ? 'rgba(76, 201, 240, 0.2)' : 'rgba(247, 37, 133, 0.2)'}; color: ${result.score / result.total >= 0.5 ? 'var(--success-color)' : 'var(--warning-color)'}; padding: 8px 15px; border-radius: 20px; font-weight: 600;">
+                            ${Math.round((result.score / result.total) * 100)}%
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge" style="background: ${result.score / result.total >= 0.5 ? 'rgba(76, 201, 240, 0.2)' : 'rgba(247, 37, 133, 0.2)'}; color: ${result.score / result.total >= 0.5 ? 'var(--success-color)' : 'var(--warning-color)'}; padding: 8px 15px; border-radius: 20px; font-weight: 600;">
+                            ${result.score / result.total >= 0.5 ? 'ناجح' : 'راسب'}
+                        </span>
+                    </td>
+                    <td>${new Date(result.date).toLocaleDateString('ar-SA')}</td>
+                </tr>
+            `).join('');
+            
+            // تحديث الإحصائيات
+            const totalStudents = mockResults.length;
+            const averageScore = mockResults.reduce((sum, result) => sum + (result.score / result.total * 100), 0) / totalStudents;
+            const maxScore = Math.max(...mockResults.map(r => r.score));
+            const minScore = Math.min(...mockResults.map(r => r.score));
+            
+            document.getElementById('examStats').innerHTML = `
+                <div style="flex: 1; min-width: 150px;">
+                    <div class="stat-icon primary" style="width: 60px; height: 60px; margin: 0 auto 15px;">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div style="font-size: 32px; font-weight: 800; color: var(--primary-color);">${totalStudents}</div>
+                    <div>عدد الطلاب</div>
+                </div>
+                <div style="flex: 1; min-width: 150px;">
+                    <div class="stat-icon success" style="width: 60px; height: 60px; margin: 0 auto 15px;">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <div style="font-size: 32px; font-weight: 800; color: var(--success-color);">${Math.round(averageScore)}%</div>
+                    <div>متوسط النجاح</div>
+                </div>
+                <div style="flex: 1; min-width: 150px;">
+                    <div class="stat-icon warning" style="width: 60px; height: 60px; margin: 0 auto 15px;">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div style="font-size: 32px; font-weight: 800; color: var(--warning-color);">${maxScore}/${exam.totalScore}</div>
+                    <div>أعلى درجة</div>
+                </div>
+                <div style="flex: 1; min-width: 150px;">
+                    <div class="stat-icon danger" style="width: 60px; height: 60px; margin: 0 auto 15px;">
+                        <i class="fas fa-chart-area"></i>
+                    </div>
+                    <div style="font-size: 32px; font-weight: 800; color: var(--danger-color);">${minScore}/${exam.totalScore}</div>
+                    <div>أقل درجة</div>
+                </div>
+            `;
+        }
+
+        // عرض نتائج الاختبار
+        function viewExamResults(examId) {
+            alert(`عرض نتائج الاختبار رقم ${examId} - هذه الميزة قيد التطوير`);
+        }
+
+        // عرض تفاصيل النتيجة
+        function viewResultDetails(resultId) {
+            alert(`عرض تفاصيل النتيجة رقم ${resultId} - هذه الميزة قيد التطوير`);
+        }
+
+        // بدء الاختبار
+        function startExam(examId) {
+            currentExam = sampleExams.find(e => e.id == examId);
+            if (!currentExam) return;
+            
+            examTimeLeft = currentExam.duration * 60; // تحويل الدقائق إلى ثواني
+            examAnswers = {};
+            currentQuestionIndex = 0;
+            
+            // الانتقال إلى شاشة الاختبار
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('examScreen').style.display = 'block';
+            
+            loadExamQuestion();
+            startExamTimer();
+        }
+
+        // تحميل سؤال الاختبار الحالي
+        function loadExamQuestion() {
+            const examContent = document.getElementById('examContent');
+            const question = currentExam.questions[currentQuestionIndex];
+            
+            if (!question) return;
+            
+            let optionsHtml = '';
+            
+            if (question.type === 'mcq') {
+                optionsHtml = question.options.map((option, index) => `
+                    <div class="option ${examAnswers[question.id] === index ? 'selected' : ''}" onclick="selectAnswer(${question.id}, ${index})">
+                        <input type="radio" name="q${question.id}" ${examAnswers[question.id] === index ? 'checked' : ''}>
+                        ${option}
+                    </div>
+                `).join('');
+            } else if (question.type === 'truefalse') {
+                optionsHtml = `
+                    <div class="option ${examAnswers[question.id] === true ? 'selected' : ''}" onclick="selectAnswer(${question.id}, true)">
+                        <input type="radio" name="q${question.id}" ${examAnswers[question.id] === true ? 'checked' : ''}>
+                        صح
+                    </div>
+                    <div class="option ${examAnswers[question.id] === false ? 'selected' : ''}" onclick="selectAnswer(${question.id}, false)">
+                        <input type="radio" name="q${question.id}" ${examAnswers[question.id] === false ? 'checked' : ''}>
+                        خطأ
+                    </div>
+                `;
+            } else if (question.type === 'essay') {
+                optionsHtml = `
+                    <textarea id="essayAnswer${question.id}" style="width: 100%; height: 150px; padding: 15px; border-radius: 10px; border: 2px solid var(--border-color); font-size: 16px;" 
+                    oninput="saveEssayAnswer(${question.id}, this.value)" placeholder="أكتب إجابتك هنا...">${examAnswers[question.id] || ''}</textarea>
+                `;
+            }
+            
+            // إنشاء أزرار التنقل بين الأسئلة
+            const navButtons = currentExam.questions.map((q, index) => `
+                <button class="question-nav-btn ${index === currentQuestionIndex ? 'active' : ''} ${examAnswers[q.id] !== undefined ? 'answered' : ''}" 
+                onclick="goToQuestion(${index})">${index + 1}</button>
+            `).join('');
+            
+            examContent.innerHTML = `
+                <div class="exam-header">
+                    <h2>${currentExam.title}</h2>
+                    <div class="timer" id="examTimer">${formatTime(examTimeLeft)}</div>
+                </div>
+                
+                <div class="question-navigation">
+                    ${navButtons}
+                </div>
+                
+                <div class="question-card card">
+                    <div class="question-text">
+                        <strong>السؤال ${currentQuestionIndex + 1} من ${currentExam.questions.length}:</strong><br>
+                        ${question.text}
+                    </div>
+                    
+                    <div class="options-container">
+                        ${optionsHtml}
+                    </div>
+                </div>
+                
+                <div class="exam-actions">
+                    <button class="btn btn-primary" ${currentQuestionIndex === 0 ? 'disabled' : ''} onclick="prevQuestion()">
+                        <i class="fas fa-arrow-right"></i> السابق
+                    </button>
+                    
+                    <button class="btn btn-success" onclick="submitExam()">
+                        <i class="fas fa-check-circle"></i> تسليم الاختبار
+                    </button>
+                    
+                    <button class="btn btn-primary" ${currentQuestionIndex === currentExam.questions.length - 1 ? 'disabled' : ''} onclick="nextQuestion()">
+                        <i class="fas fa-arrow-left"></i> التالي
+                    </button>
+                </div>
+            `;
+        }
+
+        // تحديد إجابة
+        function selectAnswer(questionId, answer) {
+            examAnswers[questionId] = answer;
+            loadExamQuestion(); // إعادة تحميل السؤال لتحديث الواجهة
+        }
+
+        // حفظ إجابة مقالية
+        function saveEssayAnswer(questionId, answer) {
+            examAnswers[questionId] = answer;
+        }
+
+        // الانتقال إلى سؤال معين
+        function goToQuestion(index) {
+            currentQuestionIndex = index;
+            loadExamQuestion();
+        }
+
+        // السؤال السابق
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadExamQuestion();
+            }
+        }
+
+        // السؤال التالي
+        function nextQuestion() {
+            if (currentQuestionIndex < currentExam.questions.length - 1) {
+                currentQuestionIndex++;
+                loadExamQuestion();
+            }
+        }
+
+        // بدء مؤقت الاختبار
+        function startExamTimer() {
+            if (examTimer) clearInterval(examTimer);
+            
+            examTimer = setInterval(() => {
+                examTimeLeft--;
+                document.getElementById('examTimer').textContent = formatTime(examTimeLeft);
+                
+                // تحذير عند اقتراب انتهاء الوقت
+                if (examTimeLeft === 300) { // 5 دقائق
+                    document.getElementById('examTimer').classList.add('warning');
+                    alert('تنبيه: بقي 5 دقائق فقط على انتهاء وقت الاختبار!');
+                }
+                
+                // انتهاء الوقت تلقائياً
+                if (examTimeLeft <= 0) {
+                    clearInterval(examTimer);
+                    submitExam();
+                }
+            }, 1000);
+        }
+
+        // تنسيق الوقت
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // تسليم الاختبار
+        function submitExam() {
+            if (examTimer) clearInterval(examTimer);
+            
+            // حساب النتيجة
+            let score = 0;
+            let total = 0;
+            
+            currentExam.questions.forEach(question => {
+                if (question.type === 'mcq' || question.type === 'truefalse') {
+                    total++;
+                    if (examAnswers[question.id] === question.correctAnswer) {
+                        score++;
+                    }
+                } else if (question.type === 'essay') {
+                    total += question.maxScore || 5;
+                    // للمقالية، نعطي درجة عشوائية للتجربة
+                    score += examAnswers[question.id] ? Math.floor(Math.random() * (question.maxScore || 5)) + 1 : 0;
+                }
+            });
+            
+            // عرض شاشة النتائج
+            showResults(score, total);
+        }
+
+        // عرض النتائج
+        function showResults(score, total) {
+            document.getElementById('examScreen').style.display = 'none';
+            document.getElementById('resultScreen').style.display = 'block';
+            
+            const percentage = Math.round((score / total) * 100);
+            let resultIcon = 'success';
+            let resultMessage = '';
+            
+            if (percentage >= 85) {
+                resultIcon = 'success';
+                resultMessage = 'ممتاز! لقد حققت نتيجة رائعة.';
+            } else if (percentage >= 70) {
+                resultIcon = 'success';
+                resultMessage = 'جيد جداً! لقد اجتزت الاختبار بنجاح.';
+            } else if (percentage >= 50) {
+                resultIcon = 'warning';
+                resultMessage = 'مقبول. يمكنك التحسين في المرات القادمة.';
+            } else {
+                resultIcon = 'danger';
+                resultMessage = 'يجب عليك الدراسة أكثر للمرة القادمة.';
+            }
+            
+            // إنشاء مراجعة للإجابات
+            let answersReview = '';
+            currentExam.questions.forEach((question, index) => {
+                const userAnswer = examAnswers[question.id];
+                let correctAnswerText = '';
+                let userAnswerText = '';
+                let isCorrect = false;
+                
+                if (question.type === 'mcq') {
+                    correctAnswerText = question.options[question.correctAnswer];
+                    userAnswerText = userAnswer !== undefined ? question.options[userAnswer] : 'لم تتم الإجابة';
+                    isCorrect = userAnswer === question.correctAnswer;
+                } else if (question.type === 'truefalse') {
+                    correctAnswerText = question.correctAnswer ? 'صح' : 'خطأ';
+                    userAnswerText = userAnswer !== undefined ? (userAnswer ? 'صح' : 'خطأ') : 'لم تتم الإجابة';
+                    isCorrect = userAnswer === question.correctAnswer;
+                } else if (question.type === 'essay') {
+                    correctAnswerText = 'إجابة مقالية (يتم تقييمها من قبل المدرس)';
+                    userAnswerText = userAnswer || 'لم تتم الإجابة';
+                    isCorrect = true; // نعتبرها صحيحة مؤقتاً
+                }
+                
+                answersReview += `
+                    <div class="answer-item ${isCorrect ? 'correct' : 'incorrect'}">
+                        <p><strong>السؤال ${index + 1}:</strong> ${question.text}</p>
+                        <p><strong>إجابتك:</strong> ${userAnswerText}</p>
+                        ${!isCorrect ? `<p><strong>الإجابة الصحيحة:</strong> ${correctAnswerText}</p>` : ''}
+                    </div>
+                `;
+            });
+            
+            document.getElementById('resultContent').innerHTML = `
+                <div class="result-card card">
+                    <div class="result-icon ${resultIcon}">
+                        <i class="fas fa-${resultIcon === 'success' ? 'trophy' : resultIcon === 'warning' ? 'exclamation-triangle' : 'times-circle'}"></i>
+                    </div>
+                    
+                    <h2>${currentExam.title}</h2>
+                    <p>${resultMessage}</p>
+                    
+                    <div class="score">${score}/${total}</div>
+                    <div class="score-percentage">${percentage}%</div>
+                    
+                    <div style="margin-top: 30px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                        <button class="btn btn-primary" onclick="goToDashboard()">
+                            <i class="fas fa-home"></i> العودة إلى لوحة التحكم
+                        </button>
+                        <button class="btn btn-success" onclick="reviewAnswers()">
+                            <i class="fas fa-eye"></i> مراجعة الإجابات
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="answersReview" class="answers-review" style="display: none;">
+                    <h3>مراجعة الإجابات</h3>
+                    ${answersReview}
+                </div>
+            `;
+        }
+
+        // مراجعة الإجابات
+        function reviewAnswers() {
+            const reviewSection = document.getElementById('answersReview');
+            if (reviewSection.style.display === 'none') {
+                reviewSection.style.display = 'block';
+                window.scrollTo(0, document.body.scrollHeight);
+            } else {
+                reviewSection.style.display = 'none';
+            }
+        }
+
+        // الخروج من الاختبار
+        function exitExam() {
+            if (confirm('هل أنت متأكد من الخروج من الاختبار؟ سيتم فقدان إجاباتك.')) {
+                if (examTimer) clearInterval(examTimer);
+                goToDashboard();
+            }
+        }
+
+        // العودة إلى لوحة التحكم
+        function goToDashboard() {
+            document.getElementById('examScreen').style.display = 'none';
+            document.getElementById('resultScreen').style.display = 'none';
+            document.getElementById('createExamScreen').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            
+            // إعادة تعيين بيانات الاختبار
+            currentExam = null;
+            examAnswers = {};
+            examTimeLeft = 0;
+            currentQuestionIndex = 0;
+            
+            loadDashboardContent();
+        }
+
+        // عرض شاشة إنشاء اختبار
+        function showCreateExamScreen() {
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('createExamScreen').style.display = 'block';
+            
+            document.getElementById('createExamContent').innerHTML = `
+                <div class="page-title">
+                    <h2>إنشاء اختبار جديد</h2>
+                </div>
+                
+                <div class="card">
+                    <form id="createExamForm">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 25px;">
+                            <div class="form-group">
+                                <label for="examTitle">عنوان الاختبار</label>
+                                <input type="text" id="examTitle" placeholder="أدخل عنوان الاختبار" required style="padding: 14px; border-radius: 10px;">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="examSubject">المادة</label>
+                                <select id="examSubject" required style="padding: 14px; border-radius: 10px;">
+                                    <option value="">اختر المادة</option>
+                                    ${sampleData.subjects.map(subject => `
+                                        <option value="${subject.id}">${subject.name}</option>
+                                    `).join('')}
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 25px;">
+                            <div class="form-group">
+                                <label for="examGroup">المجموعة المستهدفة</label>
+                                <select id="examGroup" required style="padding: 14px; border-radius: 10px;">
+                                    <option value="">اختر المجموعة</option>
+                                    ${sampleData.groups.filter(g => g.teacher === currentUser.name).map(group => `
+                                        <option value="${group.id}">${group.name} - ${group.subject}</option>
+                                    `).join('')}
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="examDuration">مدة الاختبار (دقيقة)</label>
+                                <input type="number" id="examDuration" min="5" max="180" value="30" required style="padding: 14px; border-radius: 10px;">
+                            </div>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 25px;">
+                            <div class="form-group">
+                                <label for="examStartTime">وقت البدء</label>
+                                <input type="datetime-local" id="examStartTime" required style="padding: 14px; border-radius: 10px;">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="examEndTime">وقت الانتهاء</label>
+                                <input type="datetime-local" id="examEndTime" required style="padding: 14px; border-radius: 10px;">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group" style="margin-bottom: 30px;">
+                            <label for="examDescription">وصف الاختبار (اختياري)</label>
+                            <textarea id="examDescription" rows="3" placeholder="أدخل وصفاً للاختبار" style="padding: 14px; border-radius: 10px;"></textarea>
+                        </div>
+                        
+                        <hr style="margin: 30px 0; border: 1px solid var(--border-color);">
+                        
+                        <h3 style="margin-bottom: 25px; color: var(--secondary-color);">أسئلة الاختبار</h3>
+                        
+                        <div id="questionsContainer">
+                            <!-- سيتم إضافة الأسئلة هنا -->
+                        </div>
+                        
+                        <div style="text-align: center; margin: 30px 0; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                            <button type="button" class="btn btn-primary" onclick="addQuestion('mcq')">
+                                <i class="fas fa-plus-circle"></i> إضافة سؤال اختيار من متعدد
+                            </button>
+                            <button type="button" class="btn btn-warning" onclick="addQuestion('truefalse')">
+                                <i class="fas fa-plus-circle"></i> إضافة سؤال صح وخطأ
+                            </button>
+                            <button type="button" class="btn btn-success" onclick="addQuestion('essay')">
+                                <i class="fas fa-plus-circle"></i> إضافة سؤال مقالي
+                            </button>
+                        </div>
+                        
+                        <div style="text-align: center; margin-top: 40px;">
+                            <button type="submit" class="btn btn-success" style="padding: 15px 50px;">
+                                <i class="fas fa-save"></i> حفظ الاختبار
+                            </button>
+                            <button type="button" class="btn btn-danger" onclick="goToDashboard()" style="margin-right: 15px;">
+                                <i class="fas fa-times"></i> إلغاء
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            
+            // تعيين القيم الافتراضية للوقت
+            const now = new Date();
+            const startTime = new Date(now.getTime() + 24 * 60 * 60 * 1000); // غداً
+            const endTime = new Date(startTime.getTime() + 7 * 24 * 60 * 60 * 1000); // بعد أسبوع
+            
+            document.getElementById('examStartTime').value = startTime.toISOString().slice(0, 16);
+            document.getElementById('examEndTime').value = endTime.toISOString().slice(0, 16);
+            
+            // إضافة حدث للنموذج
+            document.getElementById('createExamForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveExam();
+            });
+            
+            // إضافة سؤالين كمثال
+            addQuestion('mcq');
+            addQuestion('truefalse');
+        }
+
+        // إضافة سؤال جديد
+        function addQuestion(type) {
+            const questionsContainer = document.getElementById('questionsContainer');
+            const questionId = Date.now(); // معرف فريد للسؤال
+            
+            let questionHtml = '';
+            
+            if (type === 'mcq') {
+                questionHtml = `
+                    <div class="card question-item" id="question-${questionId}" style="margin-bottom: 25px; padding: 25px; border-left: 5px solid var(--primary-color);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h4 style="color: var(--primary-color);"><i class="fas fa-list-ol"></i> سؤال اختيار من متعدد</h4>
+                            <button type="button" class="btn btn-danger btn-sm" onclick="removeQuestion(${questionId})">
+                                <i class="fas fa-trash"></i> حذف
+                            </button>
+                        </div>
+                        
+                        <div class="form-group" style="margin-bottom: 20px;">
+                            <label>نص السؤال</label>
+                            <input type="text" class="question-text" placeholder="أدخل نص السؤال" required style="padding: 14px; border-radius: 10px;">
+                        </div>
+                        
+                        <div class="form-group" style="margin-bottom: 20px;">
+                            <label>الخيارات</label>
+                            <div class="options-container" style="display: grid; gap: 15px;">
+                                <div style="display: flex; align-items: center; gap: 15px; padding: 15px; background: rgba(67, 97, 238, 0.05); border-radius: 10px;">
+                                    <input type="text" class="option-text" placeholder="الخيار الأول" required style="flex: 1; padding: 12px; border-radius: 8px;">
+                                    <input type="radio" name="correct-${questionId}" value="0">
+                                    <span>الإجابة الصحيحة</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 15px; padding: 15px; background: rgba(67, 97, 238, 0.05); border-radius: 10px;">
+                                    <input type="text" class="option-text" placeholder="الخيار الثاني" required style="flex: 1; padding: 12px; border-radius: 8px;">
+                                    <input type="radio" name="correct-${questionId}" value="1">
+                                    <span>الإجابة الصحيحة</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 15px; padding: 15px; background: rgba(67, 97, 238, 0.05); border-radius: 10px;">
+                                    <input type="text" class="option-text" placeholder="الخيار الثالث" style="flex: 1; padding: 12px; border-radius: 8px;">
+                                    <input type="radio" name="correct-${questionId}" value="2">
+                                    <span>الإجابة الصحيحة</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 15px; padding: 15px; background: rgba(67, 97, 238, 0.05); border-radius: 10px;">
+                                    <input type="text" class="option-text" placeholder="الخيار الرابع" style="flex: 1; padding: 12px; border-radius: 8px;">
+                                    <input type="radio" name="correct-${questionId}" value="3">
+                                    <span>الإجابة الصحيحة</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>الدرجة</label>
+                            <input type="number" class="question-score" min="1" max="10" value="1" required style="padding: 14px; border-radius: 10px;">
+                        </div>
+                    </div>
+                `;
+            } else if (type === 'truefalse') {
+                questionHtml = `
+                    <div class="card question-item" id="question-${questionId}" style="margin-bottom: 25px; padding: 25px; border-left: 5px solid var(--warning-color);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h4 style="color: var(--warning-color);"><i class="fas fa-check-circle"></i> سؤال صح وخطأ</h4>
+                            <button type="button" class="btn btn-danger btn-sm" onclick="removeQuestion(${questionId})">
+                                <i class="fas fa-trash"></i> حذف
+                            </button>
+                        </div>
+                        
+                        <div class="form-group" style="margin-bottom: 20px;">
+                            <label>نص السؤال</label>
+                            <input type="text" class="question-text" placeholder="أدخل نص السؤال" required style="padding: 14px; border-radius: 10px;">
+                        </div>
+                        
+                        <div class="form-group" style="margin-bottom: 20px;">
+                            <label>الإجابة الصحيحة</label>
+                            <select class="correct-answer" required style="padding: 14px; border-radius: 10px;">
+                                <option value="true">صح</option>
+                                <option value="false">خطأ</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>الدرجة</label>
+                            <input type="number" class="question-score" min="1" max="10" value="1" required style="padding: 14px; border-radius: 10px;">
+                        </div>
+                    </div>
+                `;
+            } else if (type === 'essay') {
+                questionHtml = `
+                    <div class="card question-item" id="question-${questionId}" style="margin-bottom: 25px; padding: 25px; border-left: 5px solid var(--success-color);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h4 style="color: var(--success-color);"><i class="fas fa-pen-alt"></i> سؤال مقالي</h4>
+                            <button type="button" class="btn btn-danger btn-sm" onclick="removeQuestion(${questionId})">
+                                <i class="fas fa-trash"></i> حذف
+                            </button>
+                        </div>
+                        
+                        <div class="form-group" style="margin-bottom: 20px;">
+                            <label>نص السؤال</label>
+                            <textarea class="question-text" rows="3" placeholder="أدخل نص السؤال" required style="padding: 14px; border-radius: 10px;"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>الدرجة العظمى</label>
+                            <input type="number" class="question-score" min="1" max="20" value="5" required style="padding: 14px; border-radius: 10px;">
+                        </div>
+                    </div>
+                `;
+            }
+            
+            questionsContainer.innerHTML += questionHtml;
+        }
+
+        // حذف سؤال
+        function removeQuestion(questionId) {
+            const questionElement = document.getElementById(`question-${questionId}`);
+            if (questionElement) {
+                questionElement.remove();
+            }
+        }
+
+        // حفظ الاختبار
+        function saveExam() {
+            alert('تم حفظ الاختبار بنجاح! (في التطبيق الكامل سيتم حفظه في قاعدة البيانات)');
+            goToDashboard();
+        }
+
+        // الحصول على عنوان الصفحة
+        function getPageTitle(page) {
+            const titles = {
+                'dashboard': 'لوحة التحكم',
+                'universities': 'إدارة الجامعات',
+                'majors': 'إدارة التخصصات',
+                'subjects': 'إدارة المواد',
+                'groups': 'إدارة المجموعات',
+                'students': 'إدارة الطلاب',
+                'users': 'إدارة المستخدمين',
+                'reports': 'التقارير والإحصائيات',
+                'mySubjects': 'موادي الدراسية',
+                'myGroups': 'مجموعاتي',
+                'createExam': 'إنشاء اختبار جديد',
+                'myExams': 'اختباراتي',
+                'results': 'نتائج الطلاب',
+                'availableExams': 'الاختبارات المتاحة',
+                'myResults': 'نتائجي',
+                'myProfile': 'ملفي الشخصي'
+            };
+            
+            return titles[page] || 'صفحة غير معروفة';
+        }
+
+        // وظائف مساعدة (للعرض فقط)
+        function addNewStudent() {
+            alert('إضافة طالب جديد - هذه الميزة قيد التطوير');
+        }
+
+        function addNewSubject() {
+            alert('إضافة مادة جديدة - هذه الميزة قيد التطوير');
+        }
+
+        function addNewGroup() {
+            alert('إضافة مجموعة جديدة - هذه الميزة قيد التطوير');
+        }
+    </script>
+</body>
+</html>
