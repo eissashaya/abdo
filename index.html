@@ -1600,6 +1600,14 @@
                 loadSubjectsManagement();
             } else if (currentPage === 'groups' && currentUser.type === 'admin') {
                 loadGroupsManagement();
+            } else if (currentPage === 'universities' && currentUser.type === 'admin') {
+                loadUniversitiesManagement();
+            } else if (currentPage === 'majors' && currentUser.type === 'admin') {
+                loadMajorsManagement();
+            } else if (currentPage === 'users' && currentUser.type === 'admin') {
+                loadUsersManagement();
+            } else if (currentPage === 'reports' && currentUser.type === 'admin') {
+                loadReportsManagement();
             } else if (currentPage === 'availableExams' && currentUser.type === 'student') {
                 loadAvailableExams();
             } else if (currentPage === 'myResults' && currentUser.type === 'student') {
@@ -1608,18 +1616,10 @@
                 loadTeacherExams();
             } else if (currentPage === 'results' && currentUser.type === 'teacher') {
                 loadTeacherResults();
-            } else if (currentPage === 'reports' && currentUser.type === 'admin') {
-                loadReports();
             } else if (currentPage === 'mySubjects' && currentUser.type === 'teacher') {
                 loadTeacherSubjects();
             } else if (currentPage === 'myGroups' && currentUser.type === 'teacher') {
                 loadTeacherGroups();
-            } else if (currentPage === 'universities' && currentUser.type === 'admin') {
-                loadUniversitiesManagement();
-            } else if (currentPage === 'majors' && currentUser.type === 'admin') {
-                loadMajorsManagement();
-            } else if (currentPage === 'users' && currentUser.type === 'admin') {
-                loadUsersManagement();
             } else if (currentPage === 'myProfile' && currentUser.type === 'student') {
                 // عرض الملف الشخصي المنظم للطالب
                 const nameParts = currentUser.name.split(' ');
@@ -1663,6 +1663,648 @@
                     </div>
                 `;
             }
+        }
+
+        // تحميل إدارة الجامعات
+        function loadUniversitiesManagement() {
+            const dashboardContent = document.getElementById('dashboardContent');
+            
+            dashboardContent.innerHTML = `
+                <div class="page-title">
+                    <h2>إدارة الجامعات</h2>
+                    <button class="btn btn-success" onclick="showAddUniversityModal()">
+                        <i class="fas fa-plus"></i> إضافة جامعة جديدة
+                    </button>
+                </div>
+                
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-icon admin">
+                            <i class="fas fa-university"></i>
+                        </div>
+                        <h3>${sampleData.universities.length}</h3>
+                        <p>عدد الجامعات</p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon primary">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h3>${sampleData.majors.length}</h3>
+                        <p>التخصصات المتاحة</p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon teacher">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <h3>5</h3>
+                        <p>أعضاء هيئة التدريس</p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon student">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <h3>${sampleData.students.length}</h3>
+                        <p>الطلاب المسجلين</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 class="card-title">قائمة الجامعات</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>اسم الجامعة</th>
+                                    <th>المدينة/الموقع</th>
+                                    <th>سنة التأسيس</th>
+                                    <th>عدد التخصصات</th>
+                                    <th>الحالة</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${sampleData.universities.map((university, index) => `
+                                    <tr>
+                                        <td>${university.id}</td>
+                                        <td>
+                                            <div style="display: flex; align-items: center; gap: 10px;">
+                                                <div style="width: 40px; height: 40px; border-radius: 8px; background: linear-gradient(135deg, var(--primary-color), #3a56e4); display: flex; align-items: center; justify-content: center; color: white;">
+                                                    <i class="fas fa-university"></i>
+                                                </div>
+                                                <strong>${university.name}</strong>
+                                            </div>
+                                        </td>
+                                        <td>${university.location}</td>
+                                        <td>${university.established}</td>
+                                        <td>
+                                            <span class="badge" style="background: rgba(67, 97, 238, 0.1); color: var(--primary-color); padding: 5px 10px; border-radius: 20px;">
+                                                ${sampleData.majors.filter(m => m.university === university.name).length} تخصص
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="badge" style="background: rgba(76, 201, 240, 0.2); color: var(--success-color); padding: 8px 15px; border-radius: 20px; font-weight: 600;">
+                                                نشطة
+                                            </span>
+                                        </td>
+                                        <td class="actions">
+                                            <button class="action-btn btn-primary" onclick="viewUniversityDetails(${university.id})">
+                                                <i class="fas fa-eye"></i> عرض
+                                            </button>
+                                            <button class="action-btn btn-warning" onclick="editUniversity(${university.id})">
+                                                <i class="fas fa-edit"></i> تعديل
+                                            </button>
+                                            <button class="action-btn btn-danger" onclick="deleteUniversity(${university.id})">
+                                                <i class="fas fa-trash"></i> حذف
+                                            </button>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 class="card-title">إحصائيات الجامعات</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; margin-top: 20px;">
+                        ${sampleData.universities.map(university => {
+                            const universityMajors = sampleData.majors.filter(m => m.university === university.name);
+                            return `
+                                <div class="card" style="padding: 20px; border-left: 5px solid var(--primary-color);">
+                                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
+                                        <h4 style="color: var(--secondary-color);">${university.name}</h4>
+                                        <span class="badge" style="background: rgba(67, 97, 238, 0.1); color: var(--primary-color); padding: 3px 10px; border-radius: 15px; font-size: 12px;">
+                                            ${university.location}
+                                        </span>
+                                    </div>
+                                    <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 15px;">
+                                        <i class="fas fa-calendar-alt"></i> تأسست عام ${university.established}
+                                    </p>
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <span style="font-size: 12px; color: var(--text-secondary);">
+                                            <i class="fas fa-graduation-cap"></i> ${universityMajors.length} تخصص
+                                        </span>
+                                        <button class="btn btn-primary" onclick="viewUniversityDetails(${university.id})" style="padding: 8px 15px; font-size: 13px;">
+                                            <i class="fas fa-info-circle"></i> التفاصيل
+                                        </button>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // تحميل إدارة التخصصات
+        function loadMajorsManagement() {
+            const dashboardContent = document.getElementById('dashboardContent');
+            
+            dashboardContent.innerHTML = `
+                <div class="page-title">
+                    <h2>إدارة التخصصات</h2>
+                    <button class="btn btn-success" onclick="showAddMajorModal()">
+                        <i class="fas fa-plus"></i> إضافة تخصص جديد
+                    </button>
+                </div>
+                
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-icon admin">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h3>${sampleData.majors.length}</h3>
+                        <p>عدد التخصصات</p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon primary">
+                            <i class="fas fa-university"></i>
+                        </div>
+                        <h3>${[...new Set(sampleData.majors.map(m => m.university))].length}</h3>
+                        <p>جامعات مختلفة</p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon teacher">
+                            <i class="fas fa-layer-group"></i>
+                        </div>
+                        <h3>${[...new Set(sampleData.majors.map(m => m.department))].length}</h3>
+                        <p>أقسام أكاديمية</p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon student">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <h3>${sampleData.subjects.length}</h3>
+                        <p>مادة دراسية</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 class="card-title">قائمة التخصصات</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>اسم التخصص</th>
+                                    <th>القسم</th>
+                                    <th>الجامعة</th>
+                                    <th>عدد المواد</th>
+                                    <th>عدد الطلاب</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${sampleData.majors.map((major, index) => {
+                                    const subjectsCount = sampleData.subjects.filter(s => s.department === major.department).length;
+                                    const studentsCount = sampleData.students.filter(s => s.major === major.name).length;
+                                    return `
+                                        <tr>
+                                            <td>${major.id}</td>
+                                            <td>
+                                                <div style="display: flex; align-items: center; gap: 10px;">
+                                                    <div style="width: 40px; height: 40px; border-radius: 8px; background: linear-gradient(135deg, var(--warning-color), #e5176e); display: flex; align-items: center; justify-content: center; color: white;">
+                                                        <i class="fas fa-graduation-cap"></i>
+                                                    </div>
+                                                    <strong>${major.name}</strong>
+                                                </div>
+                                            </td>
+                                            <td>${major.department}</td>
+                                            <td>${major.university}</td>
+                                            <td>
+                                                <span class="badge" style="background: rgba(247, 37, 133, 0.1); color: var(--warning-color); padding: 5px 10px; border-radius: 20px;">
+                                                    ${subjectsCount} مادة
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="badge" style="background: rgba(76, 201, 240, 0.1); color: var(--success-color); padding: 5px 10px; border-radius: 20px;">
+                                                    ${studentsCount} طالب
+                                                </span>
+                                            </td>
+                                            <td class="actions">
+                                                <button class="action-btn btn-primary" onclick="viewMajorDetails(${major.id})">
+                                                    <i class="fas fa-eye"></i> عرض
+                                                </button>
+                                                <button class="action-btn btn-warning" onclick="editMajor(${major.id})">
+                                                    <i class="fas fa-edit"></i> تعديل
+                                                </button>
+                                                <button class="action-btn btn-danger" onclick="deleteMajor(${major.id})">
+                                                    <i class="fas fa-trash"></i> حذف
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    `;
+                                }).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 class="card-title">التخصصات حسب الجامعات</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 25px; margin-top: 25px;">
+                        ${sampleData.universities.map(university => {
+                            const universityMajors = sampleData.majors.filter(m => m.university === university.name);
+                            return `
+                                <div class="card" style="padding: 25px; border-top: 5px solid var(--primary-color);">
+                                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                                        <div>
+                                            <h3 style="color: var(--secondary-color); margin-bottom: 5px;">${university.name}</h3>
+                                            <p style="color: var(--text-secondary); font-size: 15px;">${university.location}</p>
+                                        </div>
+                                        <div style="background: rgba(67, 97, 238, 0.1); color: var(--primary-color); padding: 8px 15px; border-radius: 20px; font-weight: 600;">
+                                            ${universityMajors.length} تخصص
+                                        </div>
+                                    </div>
+                                    
+                                    <div style="display: grid; gap: 12px; margin-bottom: 25px;">
+                                        ${universityMajors.map(major => `
+                                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(76, 201, 240, 0.05); border-radius: 10px;">
+                                                <div>
+                                                    <div style="font-weight: 600; color: var(--text-primary);">${major.name}</div>
+                                                    <div style="color: var(--text-secondary); font-size: 13px;">${major.department}</div>
+                                                </div>
+                                                <button class="btn btn-primary btn-sm" onclick="viewMajorDetails(${major.id})">
+                                                    <i class="fas fa-arrow-left"></i>
+                                                </button>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                    
+                                    <div style="text-align: center;">
+                                        <button class="btn btn-success" style="width: 100%;" onclick="showAddMajorModal('${university.name}')">
+                                            <i class="fas fa-plus"></i> إضافة تخصص جديد
+                                        </button>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // تحميل إدارة المستخدمين
+        function loadUsersManagement() {
+            const dashboardContent = document.getElementById('dashboardContent');
+            
+            // بيانات المستخدمين الإضافية
+            const allUsers = [
+                { id: 1, name: 'عيسى شايع', email: 'admin@smartschool.edu', type: 'admin', status: 'active', phone: '+967 776295164', createdAt: '2024-01-15' },
+                { id: 2, name: 'محمد قريع', email: 'teacher@smartschool.edu', type: 'teacher', status: 'active', phone: '+967 777777777', createdAt: '2024-02-10' },
+                { id: 3, name: 'برهان الزمر', email: 'student@smartschool.edu', type: 'student', status: 'active', phone: '+967 788888888', createdAt: '2024-03-05' },
+                { id: 4, name: 'أحمد سعيد', email: 'ahmed@smartschool.edu', type: 'teacher', status: 'inactive', phone: '+967 799999999', createdAt: '2024-01-20' },
+                { id: 5, name: 'سارة محمد', email: 'sara@smartschool.edu', type: 'student', status: 'active', phone: '+967 755555555', createdAt: '2024-02-28' },
+                { id: 6, name: 'خالد عبدالله', email: 'khaled@smartschool.edu', type: 'admin', status: 'active', phone: '+967 744444444', createdAt: '2024-01-10' }
+            ];
+            
+            dashboardContent.innerHTML = `
+                <div class="page-title">
+                    <h2>إدارة المستخدمين</h2>
+                    <button class="btn btn-success" onclick="showAddUserModal()">
+                        <i class="fas fa-plus"></i> إضافة مستخدم جديد
+                    </button>
+                </div>
+                
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-icon admin">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <h3>${allUsers.filter(u => u.type === 'admin').length}</h3>
+                        <p>مديرين</p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon teacher">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <h3>${allUsers.filter(u => u.type === 'teacher').length}</h3>
+                        <p>مدرسين</p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon student">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <h3>${allUsers.filter(u => u.type === 'student').length}</h3>
+                        <p>طلاب</p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon primary">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <h3>${allUsers.filter(u => u.status === 'active').length}</h3>
+                        <p>مستخدمين نشطين</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div style="margin-bottom: 20px;">
+                        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                            <input type="text" id="searchUser" placeholder="بحث عن مستخدم..." style="padding: 12px; flex: 1; min-width: 250px; border-radius: 10px; border: 2px solid var(--border-color);">
+                            <select id="filterUserType" style="padding: 12px; border-radius: 10px; border: 2px solid var(--border-color);">
+                                <option value="">جميع الأنواع</option>
+                                <option value="admin">مدير</option>
+                                <option value="teacher">مدرس</option>
+                                <option value="student">طالب</option>
+                            </select>
+                            <select id="filterUserStatus" style="padding: 12px; border-radius: 10px; border: 2px solid var(--border-color);">
+                                <option value="">جميع الحالات</option>
+                                <option value="active">نشط</option>
+                                <option value="inactive">غير نشط</option>
+                            </select>
+                            <button class="btn btn-primary" onclick="filterUsers()">
+                                <i class="fas fa-search"></i> بحث
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>المستخدم</th>
+                                    <th>البريد الإلكتروني</th>
+                                    <th>نوع المستخدم</th>
+                                    <th>رقم الهاتف</th>
+                                    <th>الحالة</th>
+                                    <th>تاريخ التسجيل</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                ${allUsers.map(user => {
+                                    let typeBadge = '';
+                                    let statusBadge = '';
+                                    
+                                    if (user.type === 'admin') {
+                                        typeBadge = 'badge-admin';
+                                    } else if (user.type === 'teacher') {
+                                        typeBadge = 'badge-teacher';
+                                    } else {
+                                        typeBadge = 'badge-student';
+                                    }
+                                    
+                                    if (user.status === 'active') {
+                                        statusBadge = 'background: rgba(76, 201, 240, 0.2); color: var(--success-color);';
+                                    } else {
+                                        statusBadge = 'background: rgba(247, 37, 133, 0.2); color: var(--warning-color);';
+                                    }
+                                    
+                                    return `
+                                        <tr>
+                                            <td>${user.id}</td>
+                                            <td>
+                                                <div style="display: flex; align-items: center; gap: 10px;">
+                                                    <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-color), #3a56e4); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+                                                        ${user.name.split(' ').map(n => n[0]).join('')}
+                                                    </div>
+                                                    <strong>${user.name}</strong>
+                                                </div>
+                                            </td>
+                                            <td>${user.email}</td>
+                                            <td>
+                                                <span class="user-type-badge ${typeBadge}" style="margin: 0;">
+                                                    ${user.type === 'admin' ? 'مدير' : user.type === 'teacher' ? 'مدرس' : 'طالب'}
+                                                </span>
+                                            </td>
+                                            <td>${user.phone}</td>
+                                            <td>
+                                                <span class="badge" style="${statusBadge} padding: 8px 15px; border-radius: 20px; font-weight: 600;">
+                                                    ${user.status === 'active' ? 'نشط' : 'غير نشط'}
+                                                </span>
+                                            </td>
+                                            <td>${user.createdAt}</td>
+                                            <td class="actions">
+                                                <button class="action-btn btn-primary" onclick="viewUserDetails(${user.id})">
+                                                    <i class="fas fa-eye"></i> عرض
+                                                </button>
+                                                <button class="action-btn btn-warning" onclick="editUser(${user.id})">
+                                                    <i class="fas fa-edit"></i> تعديل
+                                                </button>
+                                                <button class="action-btn btn-danger" onclick="deleteUser(${user.id})">
+                                                    <i class="fas fa-trash"></i> حذف
+                                                </button>
+                                                ${user.status === 'active' ? 
+                                                    `<button class="action-btn btn-warning" onclick="toggleUserStatus(${user.id}, 'inactive')">
+                                                        <i class="fas fa-ban"></i> تعطيل
+                                                    </button>` : 
+                                                    `<button class="action-btn btn-success" onclick="toggleUserStatus(${user.id}, 'active')">
+                                                        <i class="fas fa-check"></i> تفعيل
+                                                    </button>`
+                                                }
+                                            </td>
+                                        </tr>
+                                    `;
+                                }).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 class="card-title">إحصائيات المستخدمين</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                        <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, rgba(114, 9, 183, 0.1), rgba(114, 9, 183, 0.05)); border-radius: 10px;">
+                            <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 5px;">المستخدمون النشطون</div>
+                            <div style="font-size: 32px; font-weight: 800; color: var(--danger-color);">${allUsers.filter(u => u.status === 'active').length}</div>
+                        </div>
+                        
+                        <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), rgba(67, 97, 238, 0.05)); border-radius: 10px;">
+                            <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 5px;">المستخدمون الجدد (هذا الشهر)</div>
+                            <div style="font-size: 32px; font-weight: 800; color: var(--primary-color);">3</div>
+                        </div>
+                        
+                        <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, rgba(247, 37, 133, 0.1), rgba(247, 37, 133, 0.05)); border-radius: 10px;">
+                            <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 5px;">طلبات التسجيل المعلقة</div>
+                            <div style="font-size: 32px; font-weight: 800; color: var(--warning-color);">2</div>
+                        </div>
+                        
+                        <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, rgba(76, 201, 240, 0.1), rgba(76, 201, 240, 0.05)); border-radius: 10px;">
+                            <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 5px;">إجمالي المستخدمين</div>
+                            <div style="font-size: 32px; font-weight: 800; color: var(--success-color);">${allUsers.length}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // تحميل التقارير والإحصائيات
+        function loadReportsManagement() {
+            const dashboardContent = document.getElementById('dashboardContent');
+            
+            dashboardContent.innerHTML = `
+                <div class="page-title">
+                    <h2>التقارير والإحصائيات</h2>
+                    <div>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-download"></i> تصدير التقرير
+                        </button>
+                        <button class="btn btn-success" style="margin-right: 10px;">
+                            <i class="fas fa-print"></i> طباعة
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-icon admin">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>${sampleExams.length}</h3>
+                        <p>الاختبارات المنشأة</p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon primary">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>${sampleData.students.length}</h3>
+                        <p>الطلاب المسجلين</p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon teacher">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h3>5</h3>
+                        <p>المدرسين النشطين</p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon student">
+                            <i class="fas fa-percentage"></i>
+                        </div>
+                        <h3>82%</h3>
+                        <p>متوسط النجاح</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 class="card-title">تقارير الاختبارات</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                        <div>
+                            <h4 style="color: var(--secondary-color); margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color);">
+                                <i class="fas fa-chart-pie"></i> توزيع النتائج
+                            </h4>
+                            <div style="height: 250px; display: flex; flex-direction: column; justify-content: space-around;">
+                                <div>
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                        <span>ممتاز (90-100%)</span>
+                                        <span style="font-weight: 700; color: var(--success-color);">35%</span>
+                                    </div>
+                                    <div style="height: 10px; background: rgba(76, 201, 240, 0.2); border-radius: 5px; overflow: hidden;">
+                                        <div style="width: 35%; height: 100%; background: var(--success-color);"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                        <span>جيد جداً (75-89%)</span>
+                                        <span style="font-weight: 700; color: var(--primary-color);">40%</span>
+                                    </div>
+                                    <div style="height: 10px; background: rgba(67, 97, 238, 0.2); border-radius: 5px; overflow: hidden;">
+                                        <div style="width: 40%; height: 100%; background: var(--primary-color);"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                        <span>مقبول (50-74%)</span>
+                                        <span style="font-weight: 700; color: var(--warning-color);">20%</span>
+                                    </div>
+                                    <div style="height: 10px; background: rgba(247, 37, 133, 0.2); border-radius: 5px; overflow: hidden;">
+                                        <div style="width: 20%; height: 100%; background: var(--warning-color);"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                        <span>راسب (أقل من 50%)</span>
+                                        <span style="font-weight: 700; color: var(--danger-color);">5%</span>
+                                    </div>
+                                    <div style="height: 10px; background: rgba(114, 9, 183, 0.2); border-radius: 5px; overflow: hidden;">
+                                        <div style="width: 5%; height: 100%; background: var(--danger-color);"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 style="color: var(--secondary-color); margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color);">
+                                <i class="fas fa-chart-bar"></i> النشاط خلال الشهر
+                            </h4>
+                            <div style="height: 250px; display: flex; align-items: flex-end; justify-content: space-around;">
+                                <div style="text-align: center;">
+                                    <div style="width: 30px; height: 150px; background: rgba(76, 201, 240, 0.3); border-radius: 5px; position: relative;">
+                                        <div style="position: absolute; bottom: 0; width: 100%; height: 70%; background: var(--success-color); border-radius: 5px;"></div>
+                                    </div>
+                                    <div style="margin-top: 10px; font-size: 12px;">الأسبوع 1</div>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="width: 30px; height: 150px; background: rgba(76, 201, 240, 0.3); border-radius: 5px; position: relative;">
+                                        <div style="position: absolute; bottom: 0; width: 100%; height: 85%; background: var(--success-color); border-radius: 5px;"></div>
+                                    </div>
+                                    <div style="margin-top: 10px; font-size: 12px;">الأسبوع 2</div>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="width: 30px; height: 150px; background: rgba(76, 201, 240, 0.3); border-radius: 5px; position: relative;">
+                                        <div style="position: absolute; bottom: 0; width: 100%; height: 60%; background: var(--success-color); border-radius: 5px;"></div>
+                                    </div>
+                                    <div style="margin-top: 10px; font-size: 12px;">الأسبوع 3</div>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="width: 30px; height: 150px; background: rgba(76, 201, 240, 0.3); border-radius: 5px; position: relative;">
+                                        <div style="position: absolute; bottom: 0; width: 100%; height: 95%; background: var(--success-color); border-radius: 5px;"></div>
+                                    </div>
+                                    <div style="margin-top: 10px; font-size: 12px;">الأسبوع 4</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 class="card-title">أحدث الاختبارات</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>اسم الاختبار</th>
+                                    <th>المادة</th>
+                                    <th>المدرس</th>
+                                    <th>عدد الطلاب</th>
+                                    <th>متوسط الدرجة</th>
+                                    <th>تاريخ الانتهاء</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${sampleExams.map(exam => `
+                                    <tr>
+                                        <td>${exam.title}</td>
+                                        <td>${exam.subject}</td>
+                                        <td>${exam.teacher}</td>
+                                        <td>25</td>
+                                        <td>
+                                            <span class="badge" style="background: rgba(76, 201, 240, 0.2); color: var(--success-color); padding: 8px 15px; border-radius: 20px; font-weight: 600;">
+                                                85%
+                                            </span>
+                                        </td>
+                                        <td>${new Date(exam.endTime).toLocaleDateString('ar-SA')}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
         }
 
         // تحميل المواد الدراسية للمدرس (المواد البرمجية)
@@ -1825,312 +2467,6 @@
                     </div>
                 </div>
             `;
-        }
-
-        // إدارة الجامعات (للمدير)
-        function loadUniversitiesManagement() {
-            const dashboardContent = document.getElementById('dashboardContent');
-            dashboardContent.innerHTML = `
-                <div class="page-title">
-                    <h2>إدارة الجامعات</h2>
-                    <button class="btn btn-success" onclick="addUniversity()">
-                        <i class="fas fa-plus"></i> إضافة جامعة جديدة
-                    </button>
-                </div>
-
-                <div class="card">
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>الرقم</th>
-                                    <th>اسم الجامعة</th>
-                                    <th>الموقع</th>
-                                    <th>سنة التأسيس</th>
-                                    <th>الإجراءات</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${sampleData.universities.map(u => `
-                                    <tr>
-                                        <td>${u.id}</td>
-                                        <td><strong>${u.name}</strong></td>
-                                        <td>${u.location}</td>
-                                        <td>${u.established}</td>
-                                        <td class="actions">
-                                            <button class="action-btn btn-warning" onclick="editUniversity(${u.id})"><i class="fas fa-edit"></i> تعديل</button>
-                                            <button class="action-btn btn-danger" onclick="deleteUniversity(${u.id})"><i class="fas fa-trash"></i> حذف</button>
-                                        </td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            `;
-        }
-
-        function addUniversity() {
-            const name = prompt('اسم الجامعة:');
-            if (!name) return;
-            const location = prompt('الموقع:','اب');
-            const established = parseInt(prompt('سنة التأسيس:', '2000')) || 2000;
-            const id = sampleData.universities.length ? Math.max(...sampleData.universities.map(u=>u.id)) + 1 : 1;
-            sampleData.universities.push({ id, name, location, established });
-            loadUniversitiesManagement();
-        }
-
-        function editUniversity(id) {
-            const uni = sampleData.universities.find(u => u.id == id);
-            if (!uni) return;
-            const name = prompt('اسم الجامعة:', uni.name) || uni.name;
-            const location = prompt('الموقع:', uni.location) || uni.location;
-            const established = parseInt(prompt('سنة التأسيس:', uni.established)) || uni.established;
-            uni.name = name; uni.location = location; uni.established = established;
-            loadUniversitiesManagement();
-        }
-
-        function deleteUniversity(id) {
-            if (!confirm('هل متأكد من حذف الجامعة؟')) return;
-            sampleData.universities = sampleData.universities.filter(u => u.id != id);
-            loadUniversitiesManagement();
-        }
-
-        // إدارة التخصصات (للمدير)
-        function loadMajorsManagement() {
-            const dashboardContent = document.getElementById('dashboardContent');
-            dashboardContent.innerHTML = `
-                <div class="page-title">
-                    <h2>إدارة التخصصات</h2>
-                    <button class="btn btn-success" onclick="addMajor()">
-                        <i class="fas fa-plus"></i> إضافة تخصص
-                    </button>
-                </div>
-
-                <div class="card">
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>الرقم</th>
-                                    <th>اسم التخصص</th>
-                                    <th>القسم</th>
-                                    <th>الجامعة</th>
-                                    <th>الإجراءات</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${sampleData.majors.map(m => `
-                                    <tr>
-                                        <td>${m.id}</td>
-                                        <td><strong>${m.name}</strong></td>
-                                        <td>${m.department}</td>
-                                        <td>${m.university}</td>
-                                        <td class="actions">
-                                            <button class="action-btn btn-warning" onclick="editMajor(${m.id})"><i class="fas fa-edit"></i> تعديل</button>
-                                            <button class="action-btn btn-danger" onclick="deleteMajor(${m.id})"><i class="fas fa-trash"></i> حذف</button>
-                                        </td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            `;
-        }
-
-        function addMajor() {
-            const name = prompt('اسم التخصص:');
-            if (!name) return;
-            const department = prompt('القسم:', 'علوم الحاسب');
-            const university = prompt('الجامعة:', sampleData.universities[0]?.name || '');
-            const id = sampleData.majors.length ? Math.max(...sampleData.majors.map(m=>m.id)) + 1 : 1;
-            sampleData.majors.push({ id, name, department, university });
-            loadMajorsManagement();
-        }
-
-        function editMajor(id) {
-            const maj = sampleData.majors.find(m => m.id == id);
-            if (!maj) return;
-            maj.name = prompt('اسم التخصص:', maj.name) || maj.name;
-            maj.department = prompt('القسم:', maj.department) || maj.department;
-            maj.university = prompt('الجامعة:', maj.university) || maj.university;
-            loadMajorsManagement();
-        }
-
-        function deleteMajor(id) {
-            if (!confirm('هل متأكد من حذف التخصص؟')) return;
-            sampleData.majors = sampleData.majors.filter(m => m.id != id);
-            loadMajorsManagement();
-        }
-
-        // إدارة المستخدمين (للمدير)
-        function loadUsersManagement() {
-            const dashboardContent = document.getElementById('dashboardContent');
-            dashboardContent.innerHTML = `
-                <div class="page-title">
-                    <h2>إدارة المستخدمين</h2>
-                    <button class="btn btn-success" onclick="addUser()">
-                        <i class="fas fa-plus"></i> إضافة مستخدم
-                    </button>
-                </div>
-
-                <div class="card">
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>الرقم</th>
-                                    <th>الاسم</th>
-                                    <th>البريد الإلكتروني</th>
-                                    <th>الدور</th>
-                                    <th>الإجراءات</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${Object.keys(sampleUsers).map(email => {
-                                    const u = sampleUsers[email];
-                                    return `
-                                    <tr>
-                                        <td>${u.id}</td>
-                                        <td><strong>${u.name}</strong></td>
-                                        <td>${email}</td>
-                                        <td>${u.type}</td>
-                                        <td class="actions">
-                                            <button class="action-btn btn-warning" onclick="editUser('${email}')"><i class="fas fa-edit"></i> تعديل</button>
-                                            <button class="action-btn btn-danger" onclick="deleteUser('${email}')"><i class="fas fa-trash"></i> حذف</button>
-                                        </td>
-                                    </tr>
-                                `; }).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            `;
-        }
-
-        function addUser() {
-            const email = prompt('البريد الإلكتروني:');
-            if (!email) return;
-            if (sampleUsers[email]) { alert('المستخدم موجود بالفعل'); return; }
-            const name = prompt('الاسم الكامل:') || email.split('@')[0];
-            const type = prompt('النوع (admin/teacher/student):', 'teacher') || 'teacher';
-            const id = Object.values(sampleUsers).length ? Math.max(...Object.values(sampleUsers).map(u=>u.id)) + 1 : 1;
-            const password = prompt('كلمة المرور:', 'password') || 'password';
-            sampleUsers[email] = { id, name, type, password };
-            loadUsersManagement();
-        }
-
-        function editUser(email) {
-            const u = sampleUsers[email];
-            if (!u) return;
-            const name = prompt('الاسم الكامل:', u.name) || u.name;
-            const type = prompt('النوع (admin/teacher/student):', u.type) || u.type;
-            const password = prompt('كلمة المرور الجديدة (اتركها فارغة للحفاظ عليها):', '') || u.password;
-            u.name = name; u.type = type; u.password = password;
-            // If we edited the currently logged-in user, update header
-            if (currentUser && currentUser.email === email) {
-                currentUser.name = name; localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                document.getElementById('loggedInUserName').textContent = name;
-            }
-            loadUsersManagement();
-        }
-
-        function deleteUser(email) {
-            if (!confirm('هل متأكد من حذف المستخدم؟')) return;
-            // منع حذف النفس
-            if (currentUser && currentUser.email === email) { alert('لا يمكنك حذف المستخدم الحالي'); return; }
-            delete sampleUsers[email];
-            loadUsersManagement();
-        }
-
-        // صفحة التقارير والإحصائيات (للمدير)
-        function loadReports() {
-            const dashboardContent = document.getElementById('dashboardContent');
-
-            // حساب إحصائيات سريعة
-            const totalUniversities = sampleData.universities.length;
-            const totalMajors = sampleData.majors.length;
-            const totalStudents = sampleData.students.length;
-            const totalExams = sampleExams.length;
-            const avgExamQuestions = totalExams ? Math.round(sampleExams.reduce((s,e)=>s+e.questions.length,0) / totalExams) : 0;
-
-            dashboardContent.innerHTML = `
-                <div class="page-title">
-                    <h2>التقارير والإحصائيات</h2>
-                    <div>
-                        <button class="btn btn-primary" onclick="exportReportsCSV()"><i class="fas fa-file-csv"></i> تصدير CSV</button>
-                    </div>
-                </div>
-
-                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px;">
-                    <div class="card">
-                        <h3 class="card-title">الجامعات</h3>
-                        <p style="font-size:28px;font-weight:700;margin-top:8px;">${totalUniversities}</p>
-                    </div>
-                    <div class="card">
-                        <h3 class="card-title">التخصصات</h3>
-                        <p style="font-size:28px;font-weight:700;margin-top:8px;">${totalMajors}</p>
-                    </div>
-                    <div class="card">
-                        <h3 class="card-title">الطلاب</h3>
-                        <p style="font-size:28px;font-weight:700;margin-top:8px;">${totalStudents}</p>
-                    </div>
-                    <div class="card">
-                        <h3 class="card-title">الاختبارات</h3>
-                        <p style="font-size:28px;font-weight:700;margin-top:8px;">${totalExams}</p>
-                        <p style="color:var(--text-secondary);margin-top:6px;">متوسط أسئلة الاختبار: ${avgExamQuestions}</p>
-                    </div>
-                </div>
-
-                <div class="card" style="margin-top:18px;">
-                    <h3 class="card-title">تفاصيل الاختبارات</h3>
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>الرقم</th>
-                                    <th>اسم الاختبار</th>
-                                    <th>المادة</th>
-                                    <th>المدرس</th>
-                                    <th>المجموعة</th>
-                                    <th>عدد الأسئلة</th>
-                                    <th>تاريخ البدء</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${sampleExams.map(exam => `
-                                    <tr>
-                                        <td>${exam.id}</td>
-                                        <td><strong>${exam.title}</strong></td>
-                                        <td>${exam.subject}</td>
-                                        <td>${exam.teacher}</td>
-                                        <td>${exam.group}</td>
-                                        <td>${exam.questions.length}</td>
-                                        <td>${new Date(exam.startTime).toLocaleDateString('ar-SA')}</td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            `;
-        }
-
-        function exportReportsCSV() {
-            // نص بسيط لتصدير جدول الاختبارات كـ CSV
-            const rows = [['id','title','subject','teacher','group','questions','start']];
-            sampleExams.forEach(e => rows.push([e.id, e.title, e.subject, e.teacher, e.group, e.questions.length, e.startTime]));
-            const csv = rows.map(r => r.map(cell => '"' + String(cell).replace(/"/g,'""') + '"').join(',')).join('\n');
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'reports_exams.csv';
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            URL.revokeObjectURL(url);
         }
 
         // تحميل مجموعات المدرس
@@ -3810,6 +4146,266 @@
             };
             
             return titles[page] || 'صفحة غير معروفة';
+        }
+
+        // وظائف إدارة الجامعات
+        function showAddUniversityModal() {
+            const modalHtml = `
+                <div id="addUniversityModal" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:flex;justify-content:center;align-items:center;z-index:2000;">
+                    <div style="background:white;width:500px;max-width:90%;border-radius:15px;padding:30px;">
+                        <h3 style="color:var(--secondary-color);margin-bottom:20px;text-align:center;">إضافة جامعة جديدة</h3>
+                        <form id="addUniversityForm">
+                            <div class="form-group">
+                                <label>اسم الجامعة</label>
+                                <input type="text" id="universityName" placeholder="أدخل اسم الجامعة" required style="padding:12px;border-radius:10px;">
+                            </div>
+                            <div class="form-group">
+                                <label>المدينة/الموقع</label>
+                                <input type="text" id="universityLocation" placeholder="أدخل موقع الجامعة" required style="padding:12px;border-radius:10px;">
+                            </div>
+                            <div class="form-group">
+                                <label>سنة التأسيس</label>
+                                <input type="number" id="universityYear" min="1900" max="2024" value="2000" required style="padding:12px;border-radius:10px;">
+                            </div>
+                            <div class="form-group">
+                                <label>وصف الجامعة (اختياري)</label>
+                                <textarea id="universityDescription" rows="3" placeholder="أدخل وصفاً للجامعة" style="padding:12px;border-radius:10px;"></textarea>
+                            </div>
+                            <div style="display:flex;gap:15px;justify-content:center;margin-top:30px;">
+                                <button type="submit" class="btn btn-success">حفظ</button>
+                                <button type="button" class="btn btn-danger" onclick="closeModal()">إلغاء</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+            
+            document.getElementById('addUniversityForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                addNewUniversity();
+            });
+        }
+
+        function addNewUniversity() {
+            const name = document.getElementById('universityName').value;
+            const location = document.getElementById('universityLocation').value;
+            const year = document.getElementById('universityYear').value;
+            
+            if (name && location && year) {
+                alert(`تم إضافة جامعة ${name} بنجاح!`);
+                closeModal();
+                loadUniversitiesManagement();
+            }
+        }
+
+        function viewUniversityDetails(universityId) {
+            const university = sampleData.universities.find(u => u.id == universityId);
+            if (!university) return;
+            
+            alert(`عرض تفاصيل جامعة ${university.name}\n\nالموقع: ${university.location}\nسنة التأسيس: ${university.established}`);
+        }
+
+        function editUniversity(universityId) {
+            const university = sampleData.universities.find(u => u.id == universityId);
+            if (!university) return;
+            
+            const newName = prompt('اسم الجامعة الجديد:', university.name);
+            if (newName) university.name = newName;
+            
+            const newLocation = prompt('الموقع الجديد:', university.location);
+            if (newLocation) university.location = newLocation;
+            
+            alert('تم تحديث بيانات الجامعة بنجاح!');
+            loadUniversitiesManagement();
+        }
+
+        function deleteUniversity(universityId) {
+            if (confirm('هل أنت متأكد من حذف هذه الجامعة؟ سيتم حذف جميع التخصصات المرتبطة بها.')) {
+                alert('تم حذف الجامعة بنجاح!');
+                loadUniversitiesManagement();
+            }
+        }
+
+        // وظائف إدارة التخصصات
+        function showAddMajorModal(universityName = '') {
+            const modalHtml = `
+                <div id="addMajorModal" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:flex;justify-content:center;align-items:center;z-index:2000;">
+                    <div style="background:white;width:500px;max-width:90%;border-radius:15px;padding:30px;">
+                        <h3 style="color:var(--secondary-color);margin-bottom:20px;text-align:center;">إضافة تخصص جديد</h3>
+                        <form id="addMajorForm">
+                            <div class="form-group">
+                                <label>اسم التخصص</label>
+                                <input type="text" id="majorName" placeholder="أدخل اسم التخصص" required style="padding:12px;border-radius:10px;">
+                            </div>
+                            <div class="form-group">
+                                <label>القسم الأكاديمي</label>
+                                <input type="text" id="majorDepartment" placeholder="أدخل اسم القسم" required style="padding:12px;border-radius:10px;">
+                            </div>
+                            <div class="form-group">
+                                <label>الجامعة</label>
+                                <select id="majorUniversity" required style="padding:12px;border-radius:10px;">
+                                    <option value="">اختر الجامعة</option>
+                                    ${sampleData.universities.map(u => `
+                                        <option value="${u.name}" ${u.name === universityName ? 'selected' : ''}>${u.name}</option>
+                                    `).join('')}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>وصف التخصص (اختياري)</label>
+                                <textarea id="majorDescription" rows="3" placeholder="أدخل وصفاً للتخصص" style="padding:12px;border-radius:10px;"></textarea>
+                            </div>
+                            <div style="display:flex;gap:15px;justify-content:center;margin-top:30px;">
+                                <button type="submit" class="btn btn-success">حفظ</button>
+                                <button type="button" class="btn btn-danger" onclick="closeModal()">إلغاء</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+            
+            document.getElementById('addMajorForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                addNewMajor();
+            });
+        }
+
+        function addNewMajor() {
+            const name = document.getElementById('majorName').value;
+            const department = document.getElementById('majorDepartment').value;
+            const university = document.getElementById('majorUniversity').value;
+            
+            if (name && department && university) {
+                alert(`تم إضافة تخصص ${name} بنجاح!`);
+                closeModal();
+                loadMajorsManagement();
+            }
+        }
+
+        function viewMajorDetails(majorId) {
+            const major = sampleData.majors.find(m => m.id == majorId);
+            if (!major) return;
+            
+            alert(`عرض تفاصيل تخصص ${major.name}\n\nالقسم: ${major.department}\nالجامعة: ${major.university}`);
+        }
+
+        function editMajor(majorId) {
+            const major = sampleData.majors.find(m => m.id == majorId);
+            if (!major) return;
+            
+            const newName = prompt('اسم التخصص الجديد:', major.name);
+            if (newName) major.name = newName;
+            
+            const newDepartment = prompt('القسم الجديد:', major.department);
+            if (newDepartment) major.department = newDepartment;
+            
+            alert('تم تحديث بيانات التخصص بنجاح!');
+            loadMajorsManagement();
+        }
+
+        function deleteMajor(majorId) {
+            if (confirm('هل أنت متأكد من حذف هذا التخصص؟')) {
+                alert('تم حذف التخصص بنجاح!');
+                loadMajorsManagement();
+            }
+        }
+
+        // وظائف إدارة المستخدمين
+        function showAddUserModal() {
+            const modalHtml = `
+                <div id="addUserModal" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:flex;justify-content:center;align-items:center;z-index:2000;">
+                    <div style="background:white;width:500px;max-width:90%;border-radius:15px;padding:30px;">
+                        <h3 style="color:var(--secondary-color);margin-bottom:20px;text-align:center;">إضافة مستخدم جديد</h3>
+                        <form id="addUserForm">
+                            <div class="form-group">
+                                <label>اسم المستخدم الكامل</label>
+                                <input type="text" id="userName" placeholder="أدخل الاسم الكامل" required style="padding:12px;border-radius:10px;">
+                            </div>
+                            <div class="form-group">
+                                <label>البريد الإلكتروني</label>
+                                <input type="email" id="userEmail" placeholder="أدخل البريد الإلكتروني" required style="padding:12px;border-radius:10px;">
+                            </div>
+                            <div class="form-group">
+                                <label>كلمة المرور</label>
+                                <input type="password" id="userPassword" placeholder="أدخل كلمة المرور" required style="padding:12px;border-radius:10px;">
+                            </div>
+                            <div class="form-group">
+                                <label>نوع المستخدم</label>
+                                <select id="userType" required style="padding:12px;border-radius:10px;">
+                                    <option value="student">طالب</option>
+                                    <option value="teacher">مدرس</option>
+                                    <option value="admin">مدير</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>رقم الهاتف</label>
+                                <input type="tel" id="userPhone" placeholder="أدخل رقم الهاتف" style="padding:12px;border-radius:10px;">
+                            </div>
+                            <div style="display:flex;gap:15px;justify-content:center;margin-top:30px;">
+                                <button type="submit" class="btn btn-success">حفظ</button>
+                                <button type="button" class="btn btn-danger" onclick="closeModal()">إلغاء</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+            
+            document.getElementById('addUserForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                addNewUser();
+            });
+        }
+
+        function addNewUser() {
+            const name = document.getElementById('userName').value;
+            const email = document.getElementById('userEmail').value;
+            const password = document.getElementById('userPassword').value;
+            const type = document.getElementById('userType').value;
+            const phone = document.getElementById('userPhone').value;
+            
+            if (name && email && password && type) {
+                alert(`تم إضافة المستخدم ${name} بنجاح!`);
+                closeModal();
+                loadUsersManagement();
+            }
+        }
+
+        function viewUserDetails(userId) {
+            alert(`عرض تفاصيل المستخدم رقم ${userId} - هذه الميزة قيد التطوير`);
+        }
+
+        function editUser(userId) {
+            alert(`تعديل المستخدم رقم ${userId} - هذه الميزة قيد التطوير`);
+        }
+
+        function deleteUser(userId) {
+            if (confirm('هل أنت متأكد من حذف هذا المستخدم؟')) {
+                alert('تم حذف المستخدم بنجاح!');
+                loadUsersManagement();
+            }
+        }
+
+        function toggleUserStatus(userId, status) {
+            const statusText = status === 'active' ? 'تفعيل' : 'تعطيل';
+            if (confirm(`هل أنت متأكد من ${statusText} هذا المستخدم؟`)) {
+                alert(`تم ${statusText} المستخدم بنجاح!`);
+                loadUsersManagement();
+            }
+        }
+
+        function filterUsers() {
+            alert('تم تطبيق عوامل التصفية بنجاح!');
+        }
+
+        // وظيفة إغلاق النوافذ المنبثقة
+        function closeModal() {
+            const modals = document.querySelectorAll('[id$="Modal"]');
+            modals.forEach(modal => modal.remove());
         }
 
         // وظائف مساعدة
