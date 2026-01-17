@@ -1219,104 +1219,193 @@
         // بيانات أولية للمستخدمين (لتجربة التطبيق)
         const sampleUsers = {
             'admin@smartschool.edu': { id: 1, name: 'عيسى شايع', type: 'admin', password: 'password' },
-            'teacher@smartschool.edu': { id: 2, name: 'محمد حسن', type: 'teacher', password: 'password' },
-            'student@smartschool.edu': { id: 3, name: 'سارة أحمد', type: 'student', password: 'password' }
+            'teacher@smartschool.edu': { id: 2, name: 'محمد قريع', type: 'teacher', password: 'password' },
+            'student@smartschool.edu': { id: 3, name: 'عيسى شايع', type: 'student', password: 'password' }
         };
+
+        // بيانات المواد البرمجية للمدرس
+        const teacherSubjects = [
+            {
+                id: 1,
+                name: 'برمجة الويب',
+                code: 'WEB101',
+                credits: 3,
+                department: 'تقنية المعلومات',
+                groups: ['المجموعة أ', 'المجموعة ب'],
+                studentsCount: 45,
+                examsCount: 3,
+                averageScore: 85,
+                schedule: [
+                    { day: 'الأحد', time: '09:00 - 11:00', classroom: 'مختبر 201' },
+                    { day: 'الثلاثاء', time: '10:00 - 12:00', classroom: 'مختبر 201' }
+                ],
+                description: 'تعلم أساسيات برمجة الويب باستخدام HTML, CSS, JavaScript',
+                topics: ['HTML5', 'CSS3', 'JavaScript', 'Responsive Design', 'DOM Manipulation']
+            },
+            {
+                id: 2,
+                name: 'قواعد البيانات',
+                code: 'DB202',
+                credits: 4,
+                department: 'تقنية المعلومات',
+                groups: ['المجموعة ج'],
+                studentsCount: 30,
+                examsCount: 2,
+                averageScore: 78,
+                schedule: [
+                    { day: 'الإثنين', time: '08:00 - 10:00', classroom: 'مختبر 302' },
+                    { day: 'الأربعاء', time: '11:00 - 13:00', classroom: 'قاعة 203' }
+                ],
+                description: 'تصميم وإدارة قواعد البيانات باستخدام SQL وMySQL',
+                topics: ['SQL Queries', 'Database Design', 'Normalization', 'MySQL', 'Indexing']
+            },
+            {
+                id: 3,
+                name: 'هياكل البيانات',
+                code: 'DS303',
+                credits: 3,
+                department: 'علوم الحاسب',
+                groups: ['المجموعة أ', 'المجموعة ج'],
+                studentsCount: 40,
+                examsCount: 1,
+                averageScore: 82,
+                schedule: [
+                    { day: 'الأحد', time: '13:00 - 15:00', classroom: 'قاعة 105' },
+                    { day: 'الخميس', time: '12:00 - 14:00', classroom: 'مختبر 401' }
+                ],
+                description: 'دراسة هياكل البيانات الأساسية والخوارزميات',
+                topics: ['Arrays', 'Linked Lists', 'Stacks', 'Queues', 'Trees', 'Sorting Algorithms']
+            },
+            {
+                id: 4,
+                name: 'برمجة تطبيقات الجوال',
+                code: 'MOB404',
+                credits: 4,
+                department: 'هندسة البرمجيات',
+                groups: ['المجموعة ب'],
+                studentsCount: 35,
+                examsCount: 2,
+                averageScore: 88,
+                schedule: [
+                    { day: 'الإثنين', time: '14:00 - 16:00', classroom: 'مختبر 501' },
+                    { day: 'الأربعاء', time: '09:00 - 11:00', classroom: 'مختبر 501' }
+                ],
+                description: 'تطوير تطبيقات الجوال باستخدام React Native',
+                topics: ['React Native', 'Mobile UI', 'API Integration', 'State Management', 'Deployment']
+            },
+            {
+                id: 5,
+                name: 'أمن المعلومات',
+                code: 'SEC505',
+                credits: 3,
+                department: 'أمن الشبكات',
+                groups: ['المجموعة أ'],
+                studentsCount: 25,
+                examsCount: 1,
+                averageScore: 90,
+                schedule: [
+                    { day: 'الثلاثاء', time: '14:00 - 16:00', classroom: 'قاعة 301' },
+                    { day: 'الخميس', time: '10:00 - 12:00', classroom: 'مختبر 601' }
+                ],
+                description: 'مبادئ أمن المعلومات وحماية الأنظمة',
+                topics: ['Encryption', 'Authentication', 'Network Security', 'Cyber Threats', 'Security Protocols']
+            }
+        ];
 
         // بيانات الاختبارات (لتجربة التطبيق)
         const sampleExams = [
             {
                 id: 1,
-                title: 'اختبار مادة الرياضيات - الفصل الأول',
-                subject: 'الرياضيات',
-                teacher: 'محمد حسن',
+                title: 'اختبار برمجة الويب - الفصل الأول',
+                subject: 'برمجة الويب',
+                teacher: 'محمد قريع',
                 group: 'المجموعة أ',
-                duration: 30, // دقائق
+                duration: 45,
                 startTime: '2024-12-10T10:00:00',
                 endTime: '2024-12-10T18:00:00',
                 questions: [
                     {
                         id: 1,
-                        text: 'ما هو ناتج جمع ٥ + ٧؟',
+                        text: 'ما هي وظيفة الوسم <div> في HTML؟',
                         type: 'mcq',
-                        options: ['١٠', '١١', '١٢', '١٣'],
-                        correctAnswer: 2
+                        options: ['إنشاء قسم في الصفحة', 'إدراج صورة', 'إنشاء جدول', 'إضافة رابط'],
+                        correctAnswer: 0
                     },
                     {
                         id: 2,
-                        text: 'ما هو العدد الأولي من بين الأعداد التالية؟',
-                        type: 'mcq',
-                        options: ['٩', '١٥', '١٧', '٢١'],
-                        correctAnswer: 2
-                    },
-                    {
-                        id: 3,
-                        text: 'المثلث المتساوي الأضلاع جميع زواياه متساوية.',
+                        text: 'CSS هي اختصار لـ Cascading Style Sheets.',
                         type: 'truefalse',
                         correctAnswer: true
                     },
                     {
+                        id: 3,
+                        text: 'ما هي نتيجة تنفيذ الكود التالي في JavaScript: console.log(2 + "2")؟',
+                        type: 'mcq',
+                        options: ['4', '22', 'خطأ', 'undefined'],
+                        correctAnswer: 1
+                    },
+                    {
                         id: 4,
-                        text: 'ما هو محيط الدائرة التي نصف قطرها ٧ سم؟ (ط = ٢٢/٧)',
+                        text: 'اشرح الفرق بين let و var في JavaScript.',
                         type: 'essay',
-                        maxScore: 5
+                        maxScore: 10
                     }
                 ],
-                totalScore: 15
+                totalScore: 25
             },
             {
                 id: 2,
-                title: 'اختبار مادة اللغة العربية',
-                subject: 'اللغة العربية',
-                teacher: 'محمد حسن',
-                group: 'المجموعة ب',
-                duration: 45,
+                title: 'اختبار قواعد البيانات النصفي',
+                subject: 'قواعد البيانات',
+                teacher: 'محمد قريع',
+                group: 'المجموعة ج',
+                duration: 60,
                 startTime: '2024-12-12T09:00:00',
                 endTime: '2024-12-12T17:00:00',
                 questions: [
                     {
                         id: 1,
-                        text: 'ما هو جمع كلمة "كتاب"؟',
+                        text: 'ما هي لغة الاستعلامات المستخدمة في قواعد البيانات العلائقية؟',
                         type: 'mcq',
-                        options: ['كتب', 'كتابات', 'كتابان', 'مكتبة'],
+                        options: ['SQL', 'Python', 'Java', 'C++'],
                         correctAnswer: 0
                     },
                     {
                         id: 2,
-                        text: 'الجملة الفعلية تبدأ بفعل.',
-                        type: 'truefalse',
-                        correctAnswer: true
+                        text: 'ما هي الأوامر المستخدمة للتعامل مع البيانات في SQL؟',
+                        type: 'essay',
+                        maxScore: 15
                     }
                 ],
-                totalScore: 10
+                totalScore: 20
             }
         ];
 
         // بيانات الطلاب والمجموعات والمواد (لتجربة التطبيق)
         const sampleData = {
             students: [
-                { id: 1, name: 'سارة أحمد', email: 'student@smartschool.edu', group: 'المجموعة أ', major: 'تقنية المعلومات', level: 'الثاني', gpa: 3.5 },
-                { id: 2, name: 'علي محمود', email: 'ali@smartschool.edu', group: 'المجموعة أ', major: 'تقنية المعلومات', level: 'الثاني', gpa: 3.2 },
-                { id: 3, name: 'فاطمة خالد', email: 'fatima@smartschool.edu', group: 'المجموعة ب', major: 'المحاسبة', level: 'الثالث', gpa: 3.8 }
+                { id: 1, name: 'برهان الزمر', email: 'student@smartschool.edu', group: 'المجموعة أ', major: 'تقنية المعلومات', level: 'الثاني', gpa: 3.5 },
+                { id: 2, name: 'محمد قريع', email: 'ali@smartschool.edu', group: 'المجموعة أ', major: 'تقنية المعلومات', level: 'الثاني', gpa: 3.2 },
+                { id: 3, name: 'مازن أبو راس', email: 'fatima@smartschool.edu', group: 'المجموعة ب', major: 'المحاسبة', level: 'الثالث', gpa: 3.8 }
             ],
             groups: [
-                { id: 1, name: 'المجموعة أ', subject: 'الرياضيات', teacher: 'محمد حسن', studentsCount: 25 },
-                { id: 2, name: 'المجموعة ب', subject: 'اللغة العربية', teacher: 'محمد حسن', studentsCount: 30 },
-                { id: 3, name: 'المجموعة ج', subject: 'الفيزياء', teacher: 'أحمد سعيد', studentsCount: 22 }
+                { id: 1, name: 'المجموعة أ', subject: 'برمجة الويب', teacher: 'محمد قريع', studentsCount: 25 },
+                { id: 2, name: 'المجموعة ب', subject: 'برمجة الويب', teacher: 'محمد قريع', studentsCount: 20 },
+                { id: 3, name: 'المجموعة ج', subject: 'قواعد البيانات', teacher: 'محمد قريع', studentsCount: 30 }
             ],
             subjects: [
-                { id: 1, name: 'الرياضيات', code: 'MATH101', credits: 3, department: 'تقنية المعلومات' },
-                { id: 2, name: 'اللغة العربية', code: 'ARAB101', credits: 2, department: 'اللغة العربية' },
-                { id: 3, name: 'الفيزياء', code: 'PHYS101', credits: 4, department: 'الهندسة' }
+                { id: 1, name: 'برمجة الويب', code: 'WEB101', credits: 3, department: 'تقنية المعلومات' },
+                { id: 2, name: 'قواعد البيانات', code: 'DB202', credits: 4, department: 'تقنية المعلومات' },
+                { id: 3, name: 'هياكل البيانات', code: 'DS303', credits: 3, department: 'علوم الحاسب' }
             ],
             universities: [
                 { id: 1, name: 'جامعة التقنية والعلوم', location: 'الرياض', established: 2000 },
-                { id: 2, name: 'جامعة النجاح', location: 'جدة', established: 1995 }
+                { id: 2, name: 'جامعة النجاح', location: 'صنعاء', established: 1995 }
             ],
             majors: [
                 { id: 1, name: 'تقنية المعلومات', department: 'علوم الحاسب', university: 'جامعة التقنية والعلوم' },
-                { id: 2, name: 'المحاسبة', department: 'إدارة الأعمال', university: 'جامعة التقنية والعلوم' },
-                { id: 3, name: 'الهندسة الكهربائية', department: 'الهندسة', university: 'جامعة النجاح' }
+                { id: 2, name: 'هندسة البرمجيات', department: 'هندسة البرمجيات', university: 'جامعة التقنية والعلوم' },
+                { id: 3, name: 'أمن المعلومات', department: 'أمن الشبكات', university: 'جامعة النجاح' }
             ]
         };
 
@@ -1519,6 +1608,50 @@
                 loadTeacherExams();
             } else if (currentPage === 'results' && currentUser.type === 'teacher') {
                 loadTeacherResults();
+            } else if (currentPage === 'reports' && currentUser.type === 'admin') {
+                loadReports();
+            } else if (currentPage === 'mySubjects' && currentUser.type === 'teacher') {
+                loadTeacherSubjects();
+            } else if (currentPage === 'myGroups' && currentUser.type === 'teacher') {
+                loadTeacherGroups();
+            } else if (currentPage === 'universities' && currentUser.type === 'admin') {
+                loadUniversitiesManagement();
+            } else if (currentPage === 'majors' && currentUser.type === 'admin') {
+                loadMajorsManagement();
+            } else if (currentPage === 'users' && currentUser.type === 'admin') {
+                loadUsersManagement();
+            } else if (currentPage === 'myProfile' && currentUser.type === 'student') {
+                // عرض الملف الشخصي المنظم للطالب
+                const nameParts = currentUser.name.split(' ');
+                const initials = nameParts.length > 1 ? (nameParts[0].charAt(0) + nameParts[1].charAt(0)) : nameParts[0].charAt(0);
+                dashboardContent.innerHTML = `
+                    <div class="card">
+                        <h3 class="card-title">ملفي الشخصي</h3>
+                        <div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;">
+                            <div style="flex:0 0 220px;text-align:center;">
+                                <div style="width:160px;height:160px;border-radius:12px;overflow:hidden;margin:0 auto;display:flex;align-items:center;justify-content:center;color:#fff;font-size:48px;background:linear-gradient(135deg,#4cc9f0,#4361ee);">
+                                    ${initials}
+                                </div>
+                                <h4 style="margin-top:12px;">${currentUser.name}</h4>
+                                <p style="color:var(--text-secondary);">طالب</p>
+                            </div>
+                            <div style="flex:1;min-width:260px;">
+                                <table style="width:100%;border-collapse:collapse;">
+                                    <tr><td style="padding:8px;font-weight:700;width:180px;">الرقم الجامعي</td><td style="padding:8px;">${currentUser.id || 'غير محدد'}</td></tr>
+                                    <tr><td style="padding:8px;font-weight:700;">البريد الإلكتروني</td><td style="padding:8px;">${currentUser.email}</td></tr>
+                                    <tr><td style="padding:8px;font-weight:700;">الكلية</td><td style="padding:8px;"> الحاسوب</td></tr>
+                                    <tr><td style="padding:8px;font-weight:700;">القسم</td><td style="padding:8px;"> تقنيه معلومات</td></tr>
+                                    <tr><td style="padding:8px;font-weight:700;">تاريخ الميلاد</td><td style="padding:8px;">01/01/2000</td></tr>
+                                    <tr><td style="padding:8px;font-weight:700;">الهاتف</td><td style="padding:8px;">+967 776295164 </td></tr>
+                                    <tr><td style="padding:8px;font-weight:700;">العنوان</td><td style="padding:8px;">المدينة اب اليمن</td></tr>
+                                </table>
+                                <div style="margin-top:15px;text-align:left;">
+                                    <button class="btn btn-success" onclick="editProfile()">تعديل الملف</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
             } else {
                 dashboardContent.innerHTML = `
                     <div class="card">
@@ -1530,6 +1663,729 @@
                     </div>
                 `;
             }
+        }
+
+        // تحميل المواد الدراسية للمدرس (المواد البرمجية)
+        function loadTeacherSubjects() {
+            const dashboardContent = document.getElementById('dashboardContent');
+            
+            dashboardContent.innerHTML = `
+                <div class="page-title">
+                    <h2>موادي الدراسية</h2>
+                    <p>إدارة المواد البرمجية التي أدرسها</p>
+                </div>
+                
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-icon teacher">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <h3>${teacherSubjects.length}</h3>
+                        <p>عدد المواد</p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon primary">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <h3>${teacherSubjects.reduce((total, subject) => total + subject.studentsCount, 0)}</h3>
+                        <p>إجمالي الطلاب</p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon success">
+                            <i class="fas fa-clipboard-check"></i>
+                        </div>
+                        <h3>${teacherSubjects.reduce((total, subject) => total + subject.examsCount, 0)}</h3>
+                        <p>الاختبارات المنشأة</p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon warning">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>${Math.round(teacherSubjects.reduce((total, subject) => total + subject.averageScore, 0) / teacherSubjects.length)}%</h3>
+                        <p>متوسط النجاح</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 class="card-title">قائمة المواد البرمجية</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 25px; margin-top: 20px;">
+                        ${teacherSubjects.map(subject => `
+                            <div class="card" style="padding: 25px; border-left: 5px solid var(--primary-color);">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
+                                    <div>
+                                        <h3 style="color: var(--secondary-color); margin-bottom: 5px;">${subject.name}</h3>
+                                        <p style="color: var(--text-secondary); font-size: 14px;">
+                                            <i class="fas fa-code"></i> ${subject.code} | ${subject.credits} ساعات معتمدة
+                                        </p>
+                                    </div>
+                                    <span class="badge" style="background: rgba(67, 97, 238, 0.1); color: var(--primary-color); padding: 5px 12px; border-radius: 20px; font-weight: 600;">
+                                        ${subject.department}
+                                    </span>
+                                </div>
+                                
+                                <p style="color: var(--text-secondary); margin-bottom: 20px; line-height: 1.6;">${subject.description}</p>
+                                
+                                <div style="margin-bottom: 20px;">
+                                    <h4 style="color: var(--text-primary); margin-bottom: 10px; font-size: 16px;">المواضيع الرئيسية:</h4>
+                                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                                        ${subject.topics.map(topic => `
+                                            <span style="background: rgba(76, 201, 240, 0.1); color: var(--success-color); padding: 5px 10px; border-radius: 15px; font-size: 13px;">
+                                                ${topic}
+                                            </span>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                                
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                    <div>
+                                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
+                                            <i class="fas fa-users" style="color: var(--teacher-color);"></i>
+                                            <span>${subject.studentsCount} طالب</span>
+                                        </div>
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <i class="fas fa-clipboard-list" style="color: var(--success-color);"></i>
+                                            <span>${subject.examsCount} اختبار</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div style="font-size: 24px; font-weight: 800; color: ${subject.averageScore >= 85 ? 'var(--success-color)' : subject.averageScore >= 70 ? 'var(--primary-color)' : 'var(--warning-color)'};">
+                                            ${subject.averageScore}%
+                                        </div>
+                                        <div style="font-size: 12px; color: var(--text-secondary);">متوسط النجاح</div>
+                                    </div>
+                                </div>
+                                
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                    <button class="btn btn-primary" onclick="viewSubjectDetails(${subject.id})">
+                                        <i class="fas fa-eye"></i> عرض التفاصيل
+                                    </button>
+                                    <button class="btn btn-success" onclick="navigateTo('createExam')">
+                                        <i class="fas fa-plus"></i> إنشاء اختبار
+                                    </button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 class="card-title">جدول المحاضرات</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>المادة</th>
+                                    <th>اليوم</th>
+                                    <th>الوقت</th>
+                                    <th>القاعة</th>
+                                    <th>المجموعات</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${teacherSubjects.flatMap(subject => 
+                                    subject.schedule.map(session => `
+                                        <tr>
+                                            <td>
+                                                <div style="display: flex; align-items: center; gap: 10px;">
+                                                    <div style="width: 40px; height: 40px; border-radius: 8px; background: linear-gradient(135deg, var(--primary-color), #3a56e4); display: flex; align-items: center; justify-content: center; color: white;">
+                                                        <i class="fas fa-laptop-code"></i>
+                                                    </div>
+                                                    <div>
+                                                        <strong>${subject.name}</strong><br>
+                                                        <small style="color: var(--text-secondary);">${subject.code}</small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>${session.day}</td>
+                                            <td><span class="badge" style="background: rgba(247, 37, 133, 0.1); color: var(--warning-color); padding: 5px 10px; border-radius: 20px;">${session.time}</span></td>
+                                            <td>${session.classroom}</td>
+                                            <td>
+                                                <div style="display: flex; flex-wrap: wrap; gap: 5px;">
+                                                    ${subject.groups.map(group => `
+                                                        <span style="background: rgba(76, 201, 240, 0.1); color: var(--success-color); padding: 3px 8px; border-radius: 15px; font-size: 12px;">
+                                                            ${group}
+                                                        </span>
+                                                    `).join('')}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-primary" onclick="viewSubjectDetails(${subject.id})">
+                                                    <i class="fas fa-info-circle"></i> تفاصيل
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    `)
+                                ).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        // إدارة الجامعات (للمدير)
+        function loadUniversitiesManagement() {
+            const dashboardContent = document.getElementById('dashboardContent');
+            dashboardContent.innerHTML = `
+                <div class="page-title">
+                    <h2>إدارة الجامعات</h2>
+                    <button class="btn btn-success" onclick="addUniversity()">
+                        <i class="fas fa-plus"></i> إضافة جامعة جديدة
+                    </button>
+                </div>
+
+                <div class="card">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>الرقم</th>
+                                    <th>اسم الجامعة</th>
+                                    <th>الموقع</th>
+                                    <th>سنة التأسيس</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${sampleData.universities.map(u => `
+                                    <tr>
+                                        <td>${u.id}</td>
+                                        <td><strong>${u.name}</strong></td>
+                                        <td>${u.location}</td>
+                                        <td>${u.established}</td>
+                                        <td class="actions">
+                                            <button class="action-btn btn-warning" onclick="editUniversity(${u.id})"><i class="fas fa-edit"></i> تعديل</button>
+                                            <button class="action-btn btn-danger" onclick="deleteUniversity(${u.id})"><i class="fas fa-trash"></i> حذف</button>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function addUniversity() {
+            const name = prompt('اسم الجامعة:');
+            if (!name) return;
+            const location = prompt('الموقع:','اب');
+            const established = parseInt(prompt('سنة التأسيس:', '2000')) || 2000;
+            const id = sampleData.universities.length ? Math.max(...sampleData.universities.map(u=>u.id)) + 1 : 1;
+            sampleData.universities.push({ id, name, location, established });
+            loadUniversitiesManagement();
+        }
+
+        function editUniversity(id) {
+            const uni = sampleData.universities.find(u => u.id == id);
+            if (!uni) return;
+            const name = prompt('اسم الجامعة:', uni.name) || uni.name;
+            const location = prompt('الموقع:', uni.location) || uni.location;
+            const established = parseInt(prompt('سنة التأسيس:', uni.established)) || uni.established;
+            uni.name = name; uni.location = location; uni.established = established;
+            loadUniversitiesManagement();
+        }
+
+        function deleteUniversity(id) {
+            if (!confirm('هل متأكد من حذف الجامعة؟')) return;
+            sampleData.universities = sampleData.universities.filter(u => u.id != id);
+            loadUniversitiesManagement();
+        }
+
+        // إدارة التخصصات (للمدير)
+        function loadMajorsManagement() {
+            const dashboardContent = document.getElementById('dashboardContent');
+            dashboardContent.innerHTML = `
+                <div class="page-title">
+                    <h2>إدارة التخصصات</h2>
+                    <button class="btn btn-success" onclick="addMajor()">
+                        <i class="fas fa-plus"></i> إضافة تخصص
+                    </button>
+                </div>
+
+                <div class="card">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>الرقم</th>
+                                    <th>اسم التخصص</th>
+                                    <th>القسم</th>
+                                    <th>الجامعة</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${sampleData.majors.map(m => `
+                                    <tr>
+                                        <td>${m.id}</td>
+                                        <td><strong>${m.name}</strong></td>
+                                        <td>${m.department}</td>
+                                        <td>${m.university}</td>
+                                        <td class="actions">
+                                            <button class="action-btn btn-warning" onclick="editMajor(${m.id})"><i class="fas fa-edit"></i> تعديل</button>
+                                            <button class="action-btn btn-danger" onclick="deleteMajor(${m.id})"><i class="fas fa-trash"></i> حذف</button>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function addMajor() {
+            const name = prompt('اسم التخصص:');
+            if (!name) return;
+            const department = prompt('القسم:', 'علوم الحاسب');
+            const university = prompt('الجامعة:', sampleData.universities[0]?.name || '');
+            const id = sampleData.majors.length ? Math.max(...sampleData.majors.map(m=>m.id)) + 1 : 1;
+            sampleData.majors.push({ id, name, department, university });
+            loadMajorsManagement();
+        }
+
+        function editMajor(id) {
+            const maj = sampleData.majors.find(m => m.id == id);
+            if (!maj) return;
+            maj.name = prompt('اسم التخصص:', maj.name) || maj.name;
+            maj.department = prompt('القسم:', maj.department) || maj.department;
+            maj.university = prompt('الجامعة:', maj.university) || maj.university;
+            loadMajorsManagement();
+        }
+
+        function deleteMajor(id) {
+            if (!confirm('هل متأكد من حذف التخصص؟')) return;
+            sampleData.majors = sampleData.majors.filter(m => m.id != id);
+            loadMajorsManagement();
+        }
+
+        // إدارة المستخدمين (للمدير)
+        function loadUsersManagement() {
+            const dashboardContent = document.getElementById('dashboardContent');
+            dashboardContent.innerHTML = `
+                <div class="page-title">
+                    <h2>إدارة المستخدمين</h2>
+                    <button class="btn btn-success" onclick="addUser()">
+                        <i class="fas fa-plus"></i> إضافة مستخدم
+                    </button>
+                </div>
+
+                <div class="card">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>الرقم</th>
+                                    <th>الاسم</th>
+                                    <th>البريد الإلكتروني</th>
+                                    <th>الدور</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${Object.keys(sampleUsers).map(email => {
+                                    const u = sampleUsers[email];
+                                    return `
+                                    <tr>
+                                        <td>${u.id}</td>
+                                        <td><strong>${u.name}</strong></td>
+                                        <td>${email}</td>
+                                        <td>${u.type}</td>
+                                        <td class="actions">
+                                            <button class="action-btn btn-warning" onclick="editUser('${email}')"><i class="fas fa-edit"></i> تعديل</button>
+                                            <button class="action-btn btn-danger" onclick="deleteUser('${email}')"><i class="fas fa-trash"></i> حذف</button>
+                                        </td>
+                                    </tr>
+                                `; }).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function addUser() {
+            const email = prompt('البريد الإلكتروني:');
+            if (!email) return;
+            if (sampleUsers[email]) { alert('المستخدم موجود بالفعل'); return; }
+            const name = prompt('الاسم الكامل:') || email.split('@')[0];
+            const type = prompt('النوع (admin/teacher/student):', 'teacher') || 'teacher';
+            const id = Object.values(sampleUsers).length ? Math.max(...Object.values(sampleUsers).map(u=>u.id)) + 1 : 1;
+            const password = prompt('كلمة المرور:', 'password') || 'password';
+            sampleUsers[email] = { id, name, type, password };
+            loadUsersManagement();
+        }
+
+        function editUser(email) {
+            const u = sampleUsers[email];
+            if (!u) return;
+            const name = prompt('الاسم الكامل:', u.name) || u.name;
+            const type = prompt('النوع (admin/teacher/student):', u.type) || u.type;
+            const password = prompt('كلمة المرور الجديدة (اتركها فارغة للحفاظ عليها):', '') || u.password;
+            u.name = name; u.type = type; u.password = password;
+            // If we edited the currently logged-in user, update header
+            if (currentUser && currentUser.email === email) {
+                currentUser.name = name; localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                document.getElementById('loggedInUserName').textContent = name;
+            }
+            loadUsersManagement();
+        }
+
+        function deleteUser(email) {
+            if (!confirm('هل متأكد من حذف المستخدم؟')) return;
+            // منع حذف النفس
+            if (currentUser && currentUser.email === email) { alert('لا يمكنك حذف المستخدم الحالي'); return; }
+            delete sampleUsers[email];
+            loadUsersManagement();
+        }
+
+        // صفحة التقارير والإحصائيات (للمدير)
+        function loadReports() {
+            const dashboardContent = document.getElementById('dashboardContent');
+
+            // حساب إحصائيات سريعة
+            const totalUniversities = sampleData.universities.length;
+            const totalMajors = sampleData.majors.length;
+            const totalStudents = sampleData.students.length;
+            const totalExams = sampleExams.length;
+            const avgExamQuestions = totalExams ? Math.round(sampleExams.reduce((s,e)=>s+e.questions.length,0) / totalExams) : 0;
+
+            dashboardContent.innerHTML = `
+                <div class="page-title">
+                    <h2>التقارير والإحصائيات</h2>
+                    <div>
+                        <button class="btn btn-primary" onclick="exportReportsCSV()"><i class="fas fa-file-csv"></i> تصدير CSV</button>
+                    </div>
+                </div>
+
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px;">
+                    <div class="card">
+                        <h3 class="card-title">الجامعات</h3>
+                        <p style="font-size:28px;font-weight:700;margin-top:8px;">${totalUniversities}</p>
+                    </div>
+                    <div class="card">
+                        <h3 class="card-title">التخصصات</h3>
+                        <p style="font-size:28px;font-weight:700;margin-top:8px;">${totalMajors}</p>
+                    </div>
+                    <div class="card">
+                        <h3 class="card-title">الطلاب</h3>
+                        <p style="font-size:28px;font-weight:700;margin-top:8px;">${totalStudents}</p>
+                    </div>
+                    <div class="card">
+                        <h3 class="card-title">الاختبارات</h3>
+                        <p style="font-size:28px;font-weight:700;margin-top:8px;">${totalExams}</p>
+                        <p style="color:var(--text-secondary);margin-top:6px;">متوسط أسئلة الاختبار: ${avgExamQuestions}</p>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top:18px;">
+                    <h3 class="card-title">تفاصيل الاختبارات</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>الرقم</th>
+                                    <th>اسم الاختبار</th>
+                                    <th>المادة</th>
+                                    <th>المدرس</th>
+                                    <th>المجموعة</th>
+                                    <th>عدد الأسئلة</th>
+                                    <th>تاريخ البدء</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${sampleExams.map(exam => `
+                                    <tr>
+                                        <td>${exam.id}</td>
+                                        <td><strong>${exam.title}</strong></td>
+                                        <td>${exam.subject}</td>
+                                        <td>${exam.teacher}</td>
+                                        <td>${exam.group}</td>
+                                        <td>${exam.questions.length}</td>
+                                        <td>${new Date(exam.startTime).toLocaleDateString('ar-SA')}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function exportReportsCSV() {
+            // نص بسيط لتصدير جدول الاختبارات كـ CSV
+            const rows = [['id','title','subject','teacher','group','questions','start']];
+            sampleExams.forEach(e => rows.push([e.id, e.title, e.subject, e.teacher, e.group, e.questions.length, e.startTime]));
+            const csv = rows.map(r => r.map(cell => '"' + String(cell).replace(/"/g,'""') + '"').join(',')).join('\n');
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'reports_exams.csv';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+        }
+
+        // تحميل مجموعات المدرس
+        function loadTeacherGroups() {
+            const dashboardContent = document.getElementById('dashboardContent');
+            
+            const teacherGroups = sampleData.groups.filter(g => g.teacher === currentUser.name);
+            
+            dashboardContent.innerHTML = `
+                <div class="page-title">
+                    <h2>مجموعاتي</h2>
+                    <p>المجموعات الدراسية التي أشرف عليها</p>
+                </div>
+                
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-icon teacher">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>${teacherGroups.length}</h3>
+                        <p>عدد المجموعات</p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon primary">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <h3>${teacherGroups.reduce((total, group) => total + group.studentsCount, 0)}</h3>
+                        <p>إجمالي الطلاب</p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon success">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <h3>${teacherSubjects.length}</h3>
+                        <p>المواد الدراسية</p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon warning">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <h3>82%</h3>
+                        <p>متوسط الحضور</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 class="card-title">المجموعات الدراسية</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 25px; margin-top: 25px;">
+                        ${teacherGroups.map(group => {
+                            const subject = teacherSubjects.find(s => s.name === group.subject);
+                            return `
+                                <div class="card" style="padding: 25px; border-top: 5px solid var(--primary-color);">
+                                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                                        <div>
+                                            <h3 style="color: var(--secondary-color); margin-bottom: 5px;">${group.name}</h3>
+                                            <p style="color: var(--text-secondary); font-size: 15px;">${group.subject}</p>
+                                        </div>
+                                        <div style="background: rgba(67, 97, 238, 0.1); color: var(--primary-color); padding: 8px 15px; border-radius: 20px; font-weight: 600;">
+                                            ${group.studentsCount} طالب
+                                        </div>
+                                    </div>
+                                    
+                                    <div style="display: grid; gap: 15px; margin-bottom: 25px;">
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(67, 97, 238, 0.1); display: flex; align-items: center; justify-content: center; color: var(--primary-color);">
+                                                <i class="fas fa-chalkboard-teacher"></i>
+                                            </div>
+                                            <div>
+                                                <div style="font-weight: 600;">المدرس</div>
+                                                <div style="color: var(--text-secondary);">${group.teacher}</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(76, 201, 240, 0.1); display: flex; align-items: center; justify-content: center; color: var(--success-color);">
+                                                <i class="fas fa-calendar-alt"></i>
+                                            </div>
+                                            <div>
+                                                <div style="font-weight: 600;">مواعيد المحاضرات</div>
+                                                <div style="color: var(--text-secondary);">
+                                                    ${subject ? subject.schedule.map(s => `${s.day} ${s.time}`).join('، ') : 'غير محدد'}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(247, 37, 133, 0.1); display: flex; align-items: center; justify-content: center; color: var(--warning-color);">
+                                                <i class="fas fa-clipboard-check"></i>
+                                            </div>
+                                            <div>
+                                                <div style="font-weight: 600;">الاختبارات</div>
+                                                <div style="color: var(--text-secondary);">
+                                                    ${subject ? subject.examsCount : 0} اختبار
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div style="display: flex; gap: 10px;">
+                                        <button class="btn btn-primary" style="flex: 1;" onclick="viewGroupStudents('${group.name}')">
+                                            <i class="fas fa-users"></i> عرض الطلاب
+                                        </button>
+                                        <button class="btn btn-success" style="flex: 1;" onclick="viewGroupExams('${group.name}')">
+                                            <i class="fas fa-clipboard-list"></i> الاختبارات
+                                        </button>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // عرض تفاصيل المادة
+        function viewSubjectDetails(subjectId) {
+            const subject = teacherSubjects.find(s => s.id == subjectId);
+            if (!subject) return;
+            
+            const dashboardContent = document.getElementById('dashboardContent');
+            const pageTitle = document.getElementById('pageTitle');
+            
+            pageTitle.textContent = `تفاصيل المادة: ${subject.name}`;
+            
+            dashboardContent.innerHTML = `
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3 class="card-title">${subject.name} (${subject.code})</h3>
+                        <button class="btn btn-primary" onclick="loadTeacherSubjects()">
+                            <i class="fas fa-arrow-right"></i> العودة للقائمة
+                        </button>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                        <div style="background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), rgba(67, 97, 238, 0.05)); padding: 20px; border-radius: 10px;">
+                            <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 5px;">الكود الأكاديمي</div>
+                            <div style="font-size: 20px; font-weight: 700; color: var(--primary-color);">${subject.code}</div>
+                        </div>
+                        
+                        <div style="background: linear-gradient(135deg, rgba(76, 201, 240, 0.1), rgba(76, 201, 240, 0.05)); padding: 20px; border-radius: 10px;">
+                            <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 5px;">الساعات المعتمدة</div>
+                            <div style="font-size: 20px; font-weight: 700; color: var(--success-color);">${subject.credits} ساعة</div>
+                        </div>
+                        
+                        <div style="background: linear-gradient(135deg, rgba(247, 37, 133, 0.1), rgba(247, 37, 133, 0.05)); padding: 20px; border-radius: 10px;">
+                            <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 5px;">عدد الطلاب</div>
+                            <div style="font-size: 20px; font-weight: 700; color: var(--warning-color);">${subject.studentsCount} طالب</div>
+                        </div>
+                        
+                        <div style="background: linear-gradient(135deg, rgba(114, 9, 183, 0.1), rgba(114, 9, 183, 0.05)); padding: 20px; border-radius: 10px;">
+                            <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 5px;">متوسط النجاح</div>
+                            <div style="font-size: 20px; font-weight: 700; color: var(--danger-color);">${subject.averageScore}%</div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
+                        <div>
+                            <h4 style="color: var(--secondary-color); margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color);">
+                                <i class="fas fa-info-circle"></i> معلومات المادة
+                            </h4>
+                            
+                            <div style="display: grid; gap: 15px;">
+                                <div>
+                                    <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 5px;">القسم الأكاديمي</div>
+                                    <div style="color: var(--text-secondary);">${subject.department}</div>
+                                </div>
+                                
+                                <div>
+                                    <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 5px;">وصف المادة</div>
+                                    <div style="color: var(--text-secondary); line-height: 1.6;">${subject.description}</div>
+                                </div>
+                                
+                                <div>
+                                    <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 5px;">المواضيع الرئيسية</div>
+                                    <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 5px;">
+                                        ${subject.topics.map(topic => `
+                                            <span style="background: rgba(67, 97, 238, 0.1); color: var(--primary-color); padding: 8px 15px; border-radius: 20px; font-size: 14px;">
+                                                ${topic}
+                                            </span>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 style="color: var(--secondary-color); margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color);">
+                                <i class="fas fa-calendar-alt"></i> جدول المحاضرات
+                            </h4>
+                            
+                            <div style="display: grid; gap: 15px;">
+                                ${subject.schedule.map(session => `
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(76, 201, 240, 0.05); border-radius: 10px;">
+                                        <div>
+                                            <div style="font-weight: 600; color: var(--text-primary);">${session.day}</div>
+                                            <div style="color: var(--text-secondary); font-size: 14px;">${session.classroom}</div>
+                                        </div>
+                                        <span style="background: rgba(247, 37, 133, 0.1); color: var(--warning-color); padding: 8px 15px; border-radius: 20px; font-weight: 600;">
+                                            ${session.time}
+                                        </span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            
+                            <h4 style="color: var(--secondary-color); margin: 25px 0 15px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color);">
+                                <i class="fas fa-users"></i> المجموعات الدراسية
+                            </h4>
+                            
+                            <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                                ${subject.groups.map(group => `
+                                    <div style="background: rgba(67, 97, 238, 0.1); padding: 12px 20px; border-radius: 10px; flex: 1; min-width: 120px; text-align: center;">
+                                        <div style="font-size: 18px; font-weight: 700; color: var(--primary-color);">${group}</div>
+                                        <div style="font-size: 12px; color: var(--text-secondary);">مجموعة</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 15px; justify-content: center; margin-top: 30px;">
+                        <button class="btn btn-success" onclick="navigateTo('createExam')">
+                            <i class="fas fa-plus-circle"></i> إنشاء اختبار جديد
+                        </button>
+                        <button class="btn btn-primary" onclick="navigateTo('myExams')">
+                            <i class="fas fa-clipboard-list"></i> عرض اختبارات المادة
+                        </button>
+                        <button class="btn btn-warning" onclick="editSubject(${subject.id})">
+                            <i class="fas fa-edit"></i> تعديل المادة
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // تعديل بيانات الملف الشخصي (تبسيط عبر نوافذ حوار)
+        function editProfile() {
+            const newName = prompt('الاسم الكامل:', currentUser.name || '');
+            if (newName) currentUser.name = newName;
+            const newEmail = prompt('البريد الإلكتروني:', currentUser.email || '');
+            if (newEmail) currentUser.email = newEmail;
+            const newId = prompt('الرقم الجامعي:', currentUser.id || '');
+            if (newId) currentUser.id = newId;
+            const newPhone = prompt('الهاتف:', (currentUser.phone || ''));
+            if (newPhone) currentUser.phone = newPhone;
+            // حفظ التغييرات
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            // إعادة تحميل المحتوى وتحديث الرأس
+            document.getElementById('loggedInUserName').textContent = currentUser.name;
+            const nameParts = currentUser.name.split(' ');
+            const initials = nameParts.length > 1 ? (nameParts[0].charAt(0) + nameParts[1].charAt(0)) : nameParts[0].charAt(0);
+            document.getElementById('userAvatar').textContent = initials;
+            loadDashboardContent();
         }
 
         // تحميل الصفحة الرئيسية للوحة التحكم
@@ -1642,16 +2498,16 @@
                 dashboardContent.innerHTML = `
                     <div class="welcome-message">
                         <h3>مرحباً ${currentUser.name} 👋</h3>
-                        <p>نظام SmartExam يساعدك في إنشاء وإدارة الاختبارات الإلكترونية بسهولة</p>
+                        <p>نظام SmartExam يساعدك في إنشاء وإدارة الاختبارات الإلكترونية البرمجية بسهولة</p>
                     </div>
                     
                     <div class="stats-container">
                         <div class="stat-card">
                             <div class="stat-icon teacher">
-                                <i class="fas fa-book"></i>
+                                <i class="fas fa-laptop-code"></i>
                             </div>
-                            <h3>3</h3>
-                            <p>مادة</p>
+                            <h3>${teacherSubjects.length}</h3>
+                            <p>مادة برمجية</p>
                         </div>
                         
                         <div class="stat-card">
@@ -1674,7 +2530,7 @@
                             <div class="stat-icon admin">
                                 <i class="fas fa-chart-line"></i>
                             </div>
-                            <h3>75%</h3>
+                            <h3>${Math.round(teacherSubjects.reduce((total, subject) => total + subject.averageScore, 0) / teacherSubjects.length)}%</h3>
                             <p>متوسط النجاح</p>
                         </div>
                     </div>
@@ -1711,6 +2567,31 @@
                                     `).join('')}
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 class="card-title">موادي البرمجية</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
+                            ${teacherSubjects.slice(0, 4).map(subject => `
+                                <div class="card" style="padding: 20px; border-left: 5px solid var(--primary-color);">
+                                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
+                                        <h4 style="color: var(--secondary-color);">${subject.name}</h4>
+                                        <span class="badge" style="background: rgba(67, 97, 238, 0.1); color: var(--primary-color); padding: 3px 10px; border-radius: 15px; font-size: 12px;">
+                                            ${subject.code}
+                                        </span>
+                                    </div>
+                                    <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 15px; line-height: 1.5;">${subject.description.substring(0, 80)}...</p>
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <span style="font-size: 12px; color: var(--text-secondary);">
+                                            <i class="fas fa-users"></i> ${subject.studentsCount} طالب
+                                        </span>
+                                        <button class="btn btn-primary" onclick="viewSubjectDetails(${subject.id})" style="padding: 8px 15px; font-size: 13px;">
+                                            <i class="fas fa-eye"></i> عرض
+                                        </button>
+                                    </div>
+                                </div>
+                            `).join('')}
                         </div>
                     </div>
                 `;
@@ -1802,15 +2683,15 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>اختبار الرياضيات النصفي</td>
-                                        <td>الرياضيات</td>
+                                        <td>اختبار برمجة الويب النصفي</td>
+                                        <td>برمجة الويب</td>
                                         <td>18/20</td>
                                         <td><span class="badge badge-success">90%</span></td>
                                         <td>2024-11-15</td>
                                     </tr>
                                     <tr>
-                                        <td>اختبار اللغة العربية</td>
-                                        <td>اللغة العربية</td>
+                                        <td>اختبار قواعد البيانات</td>
+                                        <td>قواعد البيانات</td>
                                         <td>15/20</td>
                                         <td><span class="badge badge-warning">75%</span></td>
                                         <td>2024-11-10</td>
@@ -2015,7 +2896,7 @@
                             <div class="card" style="padding: 25px; border-left: 5px solid var(--primary-color);">
                                 <h3 style="color: var(--secondary-color); margin-bottom: 15px;">${exam.title}</h3>
                                 <div style="display: grid; gap: 10px;">
-                                    <p><i class="fas fa-book" style="color: var(--primary-color);"></i> <strong>المادة:</strong> ${exam.subject}</p>
+                                    <p><i class="fas fa-laptop-code" style="color: var(--primary-color);"></i> <strong>المادة:</strong> ${exam.subject}</p>
                                     <p><i class="fas fa-chalkboard-teacher" style="color: var(--teacher-color);"></i> <strong>المدرس:</strong> ${exam.teacher}</p>
                                     <p><i class="fas fa-clock" style="color: var(--warning-color);"></i> <strong>المدة:</strong> ${exam.duration} دقيقة</p>
                                     <p><i class="fas fa-calendar-alt" style="color: var(--success-color);"></i> <strong>وقت البدء:</strong> ${new Date(exam.startTime).toLocaleString('ar-SA')}</p>
@@ -2059,8 +2940,8 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>اختبار الرياضيات النصفي</td>
-                                    <td>الرياضيات</td>
+                                    <td>اختبار برمجة الويب النصفي</td>
+                                    <td>برمجة الويب</td>
                                     <td>18/20</td>
                                     <td><span class="badge" style="background: rgba(76, 201, 240, 0.2); color: var(--success-color); padding: 5px 10px; border-radius: 20px;">90%</span></td>
                                     <td>2024-11-15</td>
@@ -2071,8 +2952,8 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>اختبار اللغة العربية</td>
-                                    <td>اللغة العربية</td>
+                                    <td>اختبار قواعد البيانات</td>
+                                    <td>قواعد البيانات</td>
                                     <td>15/20</td>
                                     <td><span class="badge" style="background: rgba(247, 37, 133, 0.2); color: var(--warning-color); padding: 5px 10px; border-radius: 20px;">75%</span></td>
                                     <td>2024-11-10</td>
@@ -2083,8 +2964,8 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>اختبار الفيزياء العملي</td>
-                                    <td>الفيزياء</td>
+                                    <td>اختبار هياكل البيانات العملي</td>
+                                    <td>هياكل البيانات</td>
                                     <td>22/25</td>
                                     <td><span class="badge" style="background: rgba(76, 201, 240, 0.2); color: var(--success-color); padding: 5px 10px; border-radius: 20px;">88%</span></td>
                                     <td>2024-10-28</td>
@@ -2282,11 +3163,11 @@
             
             // محاكاة بيانات النتائج
             const mockResults = [
-                { studentName: 'سارة أحمد', email: 'student@smartschool.edu', group: exam.group, score: 18, total: exam.totalScore, date: exam.startTime },
-                { studentName: 'علي محمود', email: 'ali@smartschool.edu', group: exam.group, score: 15, total: exam.totalScore, date: exam.startTime },
-                { studentName: 'فاطمة خالد', email: 'fatima@smartschool.edu', group: exam.group, score: 12, total: exam.totalScore, date: exam.startTime },
-                { studentName: 'محمد علي', email: 'mohamed@smartschool.edu', group: exam.group, score: 20, total: exam.totalScore, date: exam.startTime },
-                { studentName: 'أحمد سعيد', email: 'ahmed@smartschool.edu', group: exam.group, score: 14, total: exam.totalScore, date: exam.startTime }
+                { studentName: 'برهان الزمر', email: 'student@smartschool.edu', group: exam.group, score: 18, total: exam.totalScore, date: exam.startTime },
+                { studentName: 'محمد قريع', email: 'ali@smartschool.edu', group: exam.group, score: 15, total: exam.totalScore, date: exam.startTime },
+                { studentName: 'مازن أبو راس', email: 'fatima@smartschool.edu', group: exam.group, score: 12, total: exam.totalScore, date: exam.startTime },
+                { studentName: 'أحمد سعيد', email: 'ahmed@smartschool.edu', group: exam.group, score: 20, total: exam.totalScore, date: exam.startTime },
+                { studentName: 'سارة محمد', email: 'sara@smartschool.edu', group: exam.group, score: 14, total: exam.totalScore, date: exam.startTime }
             ];
             
             // تحديث جدول النتائج
@@ -2351,7 +3232,19 @@
 
         // عرض نتائج الاختبار
         function viewExamResults(examId) {
-            alert(`عرض نتائج الاختبار رقم ${examId} - هذه الميزة قيد التطوير`);
+            // الانتقال إلى صفحة نتائج المدرس ثم تحميل نتائج الاختبار المحدد
+            navigateTo('results');
+            setTimeout(() => {
+                const select = document.getElementById('examSelect');
+                if (select) {
+                    select.value = examId;
+                    loadExamResults();
+                    const table = document.getElementById('examResultsTable');
+                    if (table) table.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    alert('تعذر تحميل واجهة النتائج حالياً. حاول مرة أخرى.');
+                }
+            }, 80);
         }
 
         // عرض تفاصيل النتيجة
@@ -2680,8 +3573,8 @@
                                 <label for="examSubject">المادة</label>
                                 <select id="examSubject" required style="padding: 14px; border-radius: 10px;">
                                     <option value="">اختر المادة</option>
-                                    ${sampleData.subjects.map(subject => `
-                                        <option value="${subject.id}">${subject.name}</option>
+                                    ${teacherSubjects.map(subject => `
+                                        <option value="${subject.id}">${subject.name} (${subject.code})</option>
                                     `).join('')}
                                 </select>
                             </div>
@@ -2700,7 +3593,7 @@
                             
                             <div class="form-group">
                                 <label for="examDuration">مدة الاختبار (دقيقة)</label>
-                                <input type="number" id="examDuration" min="5" max="180" value="30" required style="padding: 14px; border-radius: 10px;">
+                                <input type="number" id="examDuration" min="5" max="180" value="45" required style="padding: 14px; border-radius: 10px;">
                             </div>
                         </div>
                         
@@ -2919,7 +3812,23 @@
             return titles[page] || 'صفحة غير معروفة';
         }
 
-        // وظائف مساعدة (للعرض فقط)
+        // وظائف مساعدة
+        function editSubject(subjectId) {
+            alert(`تعديل المادة رقم ${subjectId} - هذه الميزة قيد التطوير`);
+        }
+
+        function viewGroupStudents(groupName) {
+            alert(`عرض طلاب المجموعة ${groupName} - هذه الميزة قيد التطوير`);
+        }
+
+        function viewGroupExams(groupName) {
+            alert(`عرض اختبارات المجموعة ${groupName} - هذه الميزة قيد التطوير`);
+        }
+
+        function viewGroupDetails(groupName) {
+            alert(`عرض تفاصيل المجموعة ${groupName} - هذه الميزة قيد التطوير`);
+        }
+
         function addNewStudent() {
             alert('إضافة طالب جديد - هذه الميزة قيد التطوير');
         }
